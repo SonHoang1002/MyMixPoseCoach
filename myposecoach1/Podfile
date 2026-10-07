@@ -1,0 +1,8 @@
+platform :ios, '18.0'
+
+target 'myposecoach1' do
+  use_frameworks!
+
+  # Google MediaPipe Vision Tasks — cùng model .task với bản Android.
+  pod 'MediaPipeTasksVision'
+end
