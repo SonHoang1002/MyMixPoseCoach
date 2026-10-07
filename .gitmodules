@@ -1,0 +1,4 @@
+[submodule "posecoach"]
+	path = posecoach
+	url = https://github.com/SonHoang1002/posecoach.git
+	branch = thuat-toan-khong-theo-frame
