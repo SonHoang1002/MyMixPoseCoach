@@ -1,5 +1,4 @@
 import Foundation
-import MediaPipeTasksVision
 
 // ĐÂY LÀ FILE MANG BẤT BIẾN QUAN TRỌNG NHẤT CỦA DỰ ÁN.
 //
@@ -17,8 +16,10 @@ import MediaPipeTasksVision
 //   x: 0.0 = mép TRÁI khung   →  1.0 = mép PHẢI khung
 //   y: 0.0 = mép TRÊN khung   →  1.0 = mép DƯỚI khung   (y càng lớn = càng THẤP)
 //
-// Bản iOS dùng MediaPipe (cùng model .task với Android) nên GIỮ NGUYÊN quy ước,
-// KHÔNG lật. Tuyệt đối không viết `1.0 - y` trong toàn bộ project.
+// Bản iOS dùng Apple Vision (xem `VisionPose.swift` — nơi DUY NHẤT được đổi hệ
+// toạ độ của Vision sang quy ước này). Trước đây dùng MediaPipe cùng model .task
+// với Android; đã bỏ vì MediaPipeTasksVision 1.0.0 sập trên iOS 27. Quy ước giữ
+// NGUYÊN, KHÔNG lật.
 
 /// Một điểm trên khung hình, theo đúng quy ước đã chốt ở trên.
 nonisolated struct P2: Equatable {
@@ -328,22 +329,6 @@ nonisolated struct PoseFrame {
     }
 
     static let empty = PoseFrame(points: [], visibility: [], world: [], timestampMs: 0)
-
-    /// ĐÂY LÀ CHỖ DUY NHẤT trong toàn app đọc kiểu dữ liệu của MediaPipe.
-    /// Mọi thay đổi về hệ toạ độ chỉ sửa ở đây.
-    static func from(landmarks: [NormalizedLandmark],
-                     worldLandmarks: [Landmark],
-                     timestampMs: Int64) -> PoseFrame {
-        PoseFrame(
-            // KHÔNG lật y. MediaPipe đã là gốc trên-trái, y hướng xuống - đúng quy
-            // ước ta chốt. Chép `1.0 - y` từ bản khác sang là sai.
-            points: landmarks.map { P2(x: Double($0.x), y: Double($0.y)) },
-            // visibility là NSNumber? - vắng mặt thì coi như không tin được.
-            visibility: landmarks.map { $0.visibility?.floatValue ?? 0 },
-            world: worldLandmarks.map { P3(x: Double($0.x), y: Double($0.y), z: Double($0.z)) },
-            timestampMs: timestampMs
-        )
-    }
 }
 
 /// Khung bao, theo quy ước toạ độ đã chốt (y hướng xuống).

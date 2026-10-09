@@ -28,7 +28,7 @@ import Foundation
 /// `180°` = chỉ lên. Góc khớp `0..180°`, `180°` = duỗi thẳng.
 ///
 /// ⚠️ Trái/phải ở đây là **giải phẫu của mẫu**, không phải trái/phải trên ảnh.
-/// MediaPipe đánh nhãn `left`/`right` theo cơ thể người đó, nên câu đọc lên cho
+/// Vision đánh nhãn `left`/`right` theo cơ thể người đó, nên câu đọc lên cho
 /// mẫu nghe luôn đúng dù hình có lật gương hay không.
 nonisolated enum PoseDescriber {
 

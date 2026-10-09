@@ -207,7 +207,7 @@ final class CaptureViewModel: ObservableObject {
         state.cameraError = message
     }
 
-    /// Một khung hình vừa nhận diện xong. Gọi từ luồng nền của MediaPipe.
+    /// Một khung hình vừa nhận diện xong. Gọi từ luồng nền của Vision.
     func onLiveFrame(rawFrame: PoseFrame, stats: PoseDetector.InferenceStats, minVisibility: Float) {
         // ⚠️ CAMERA TRƯỚC: khung do bộ nhận diện nhận được là ảnh THÔ TỪ CẢM BIẾN
         // (chưa lật), trong khi khung xem trước đã bị lật. iOS không có camera

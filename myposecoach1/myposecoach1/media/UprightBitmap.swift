@@ -45,8 +45,9 @@ import UIKit
 //
 // Bản Android xoay pixels thật (`Bitmap.rotate`) rồi trả `Bitmap` đã dựng. Bản iOS
 // trả `UIImage` mang `imageOrientation` theo cờ EXIF — **không vẽ lại pixels**.
-// Mọi consumer trong app đi qua `MPImage(uiImage:)` (MediaPipe tự xoay theo
-// orientation) hoặc vẽ UIImage chuẩn — nên hành vi tương đương. Tuyệt đối không
+// Mọi consumer trong app đi qua `VisionPose.frame(fromCGImage:)` với
+// `CGImagePropertyOrientation(image.imageOrientation)` (Vision tự xoay theo
+// orientation), hoặc vẽ UIImage chuẩn — nên hành vi tương đương. Tuyệt đối không
 // đọc `uiImage.cgImage` rồi coi là ảnh dựng đứng.
 nonisolated enum UprightBitmap {
 

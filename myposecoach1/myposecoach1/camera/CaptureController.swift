@@ -21,7 +21,7 @@ import UIKit
 //
 // 2. **Khung hình camera về khung CẢM BIẾN, không tự dựng đứng.** `AVCaptureVideoDataOutput`
 //    trả buffer theo chiều của cảm biến (luôn ngang); ta truyền `orientationDegrees`
-//    cho `PoseDetector` để MediaPipe tự xoay — đúng như `ImageProxy.imageInfo.rotationDegrees`
+//    cho `PoseDetector` để Vision tự xoay — đúng như `ImageProxy.imageInfo.rotationDegrees`
 //    của CameraX. Riêng ảnh chụp liên tục và video thì ghi hướng qua
 //    `AVCaptureConnection.videoRotationAngle` (ảnh ra EXIF, video ra track transform).
 //
@@ -434,8 +434,8 @@ final class CaptureController {
         // Bận thì VỨT khung mới, không xếp hàng. Xếp hàng gây trễ dồn — hướng dẫn
         // trễ 1 giây tệ hơn hướng dẫn thưa.
         videoOutput.alwaysDiscardsLateVideoFrames = true
-        // MediaPipe đòi `kCVPixelFormat_32BGRA` (xem MPPPoseLandmarker.h). Thu nhỏ
-        // luôn ở đây cho khớp mức 640px của CameraX.
+        // Vision nhận `kCVPixelFormat_32BGRA`. Thu nhỏ luôn ở đây cho khớp mức
+        // 640px của CameraX.
         let dims = analysisDims()
         videoOutput.videoSettings = [
             kCVPixelBufferPixelFormatTypeKey as String: kCVPixelFormatType_32BGRA,
@@ -522,10 +522,13 @@ final class CaptureController {
             try device.lockForConfiguration()
             device.activeFormat = chosen
             // 30 khung/giây — đủ cho hướng dẫn và nhẹ hơn 60 cho bộ nhận diện.
+            // frameDuration = THỜI GIAN / khung, nên 30fps là 1/30 giây:
+            // CMTime(value: 1, timescale: 30). Viết 30/1 nghĩa là 30 GIÂY/khung
+            // (0.03 fps) → AVFoundation ném exception NGOÀI Swift do/catch → treo máy.
             if chosen.videoSupportedFrameRateRanges.contains(where: { $0.minFrameRate <= 30 && $0.maxFrameRate >= 30 }) {
-                let fps = CMTime(value: 30, timescale: 1)
-                device.activeVideoMinFrameDuration = fps
-                device.activeVideoMaxFrameDuration = fps
+                let duration = CMTime(value: 1, timescale: 30)
+                device.activeVideoMinFrameDuration = duration
+                device.activeVideoMaxFrameDuration = duration
             }
             device.unlockForConfiguration()
             return true

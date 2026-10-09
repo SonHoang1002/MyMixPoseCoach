@@ -136,12 +136,10 @@ struct CaptureScreen: View {
             },
             onFrameImage: nil
         )
-        // Nạp model MediaPipe (~9MB) + dựng đồ thị C++ Ở LUỒNG NỀN. Nạp trên main
-        // là bảng đứng im đúng lúc vừa bấm vào màn, và còn KHOÁ chết main khi
-        // `phanTichAnhMau` (cũng đang nạp model) giữ MediaPipeGuard — đúng cảnh
-        // "bấm vào là app đơ" người dùng báo. Tương đương `Dispatchers.Default`
-        // bên Android. Khung hình đầu tiên về trễ thêm vài trăm mili-giây là vô
-        // hại: `PoseDetector.detect` bỏ qua khi chưa có bộ nhận diện.
+        // Vẫn gọi `setup()` Ở LUỒNG NỀN: Vision không nạp model, nhưng giữ nguyên
+        // luồng để không chặn main lúc vừa bấm vào màn và để đồng bộ cách khởi
+        // động với đường phân tích ảnh mẫu. Khung hình đầu tiên về ngay; `detect`
+        // bỏ qua khi chưa `setup` xong.
         Task.detached(priority: .userInitiated) { detector.setup() }
         poseDetector = detector
 

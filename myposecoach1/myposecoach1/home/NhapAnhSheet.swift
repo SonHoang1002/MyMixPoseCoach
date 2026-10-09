@@ -83,7 +83,7 @@ struct NhapAnhSheet: View {
     }
 
     /// Nạp ảnh xem trước và phân tích ảnh — CHẶNG, phải chạy off main thread vì
-    /// `phanTichAnhMau` nạp model MediaPipe ~9MB.
+    /// `phanTichAnhMau` giải mã ảnh và chạy Vision.
     private func phanTich() async {
         // Ảnh điện thoại cỡ lớn; giải mã trên main là bảng đứng im.
         let preview = await Task.detached(priority: .userInitiated) {

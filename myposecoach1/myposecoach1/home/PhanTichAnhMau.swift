@@ -35,7 +35,7 @@ nonisolated struct PhanTichAnhMau {
     }
 }
 
-/// Chạy chặn luồng nền — KHÔNG gọi từ luồng giao diện (MediaPipe 9MB + giải mã ảnh).
+/// Chạy chặn luồng nền — KHÔNG gọi từ luồng giao diện (giải mã ảnh + chạy Vision).
 nonisolated func phanTichAnhMau(file: URL) -> PhanTichAnhMau {
     let bmp = UprightBitmap.decode(file: file)
     let frame: PoseFrame? = bmp.flatMap { StillPoseAnalyzer.analyze(image: $0) }

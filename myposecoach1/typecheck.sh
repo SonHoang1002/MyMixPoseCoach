@@ -10,10 +10,7 @@ ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$ROOT"
 
 SDK=$(xcrun --sdk iphonesimulator --show-sdk-path)
-FR=(
-  -F myposecoach1/Pods/MediaPipeTasksVision/frameworks/MediaPipeTasksVision.xcframework/ios-arm64_x86_64-simulator
-  -F myposecoach1/Pods/MediaPipeTasksCommon/frameworks/MediaPipeTasksCommon.xcframework/ios-arm64_x86_64-simulator
-)
+# Không còn framework ngoài: nhận diện khung xương dùng Apple Vision (trong SDK).
 SOURCES=( myposecoach1/myposecoach1/**/*.swift(N) )
 
 xcrun swiftc -typecheck \
@@ -27,5 +24,4 @@ xcrun swiftc -typecheck \
   -enable-upcoming-feature MemberImportVisibility \
   -enable-upcoming-feature InferIsolatedConformances \
   -enable-upcoming-feature NonisolatedNonsendingByDefault \
-  "${FR[@]}" \
   "${SOURCES[@]}"

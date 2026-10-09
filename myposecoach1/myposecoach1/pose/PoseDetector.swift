@@ -1,34 +1,32 @@
+import CoreVideo
+import CoreImage
 import Foundation
-import MediaPipeTasksVision
+import ImageIO
 import UIKit
 
-// Lớp bọc quanh MediaPipe Pose Landmarker.
+// Lớp bọc nhận diện khung xương thời gian thực (camera).
 //
-// Đây là "cầu nối nền tảng" — phần khó nhất và dễ sai nhất khi chuyển từ Android
-// sang iOS. Nguyên tắc: mọi thứ đặc thù MediaPipe dừng lại ở file này; các tầng
-// trên chỉ nhận [PoseFrame] đã chuẩn hoá.
+// Trước đây bọc MediaPipe Pose Landmarker ở chế độ LIVE_STREAM. Nay dùng Apple
+// Vision (`VisionPose`) — cùng kiểu đầu ra [PoseFrame], nên tầng trên không đổi.
 //
-// Ba mức model, đổi được lúc chạy để đo (TONG_QUAN §7.4):
-//   lite  — nhanh nhất, kém chính xác nhất
-//   full  — MẶC ĐỊNH, cân bằng (toolkit khuyến nghị bắt đầu từ đây)
-//   heavy — chính xác nhất, chậm nhất (ML Kit không có mức này)
+// Lý do đổi: MediaPipeTasksVision 1.0.0 sập trên iOS 27 (driver Metal AGX). Vision
+// là framework hệ điều hành, không có pipeline Metal riêng. Xem `VisionPose.swift`.
 //
-// Ba running mode của MediaPipe ánh xạ 1-1 với ba chỗ gọi:
-//     image      → phân tích ảnh mẫu            (StillPoseAnalyzer)
-//     video      → chấm khung hình sau khi quay  (VideoPoseAnalyzer)
-//     liveStream → camera thời gian thực         (FILE NÀY)
-nonisolated final class PoseDetector: NSObject, PoseLandmarkerLiveStreamDelegate, @unchecked Sendable {
+// API công khai giữ NGUYÊN so với bản MediaPipe để các chỗ gọi khỏi sửa:
+//   setup() / close() / isReady / detect(pixelBuffer:orientationDegrees:) / detect(image:)
+//
+// Ba running mode cũ ánh xạ 1-1 với ba chỗ gọi:
+//     ảnh mẫu            → StillPoseAnalyzer
+//     chấm khung video   → VideoPoseAnalyzer
+//     camera thời gian thực → FILE NÀY
+nonisolated final class PoseDetector: @unchecked Sendable {
 
     struct Config {
         var modelAsset: String = MODEL_FULL
-        /// CPU hay GPU. FOOTGUNS: GPU KHÔNG phải lúc nào cũng nhanh hơn, và đã có
-        /// báo cáo lỗi khi xoay màn hình với model lite + GPU. Phải đo cả hai trên
-        /// máy thật rồi mới chọn — đừng mặc định GPU.
-        var delegate: Delegate = .CPU
         var minPoseDetectionConfidence: Float = 0.5
         var minPosePresenceConfidence: Float = 0.5
         var minTrackingConfidence: Float = 0.5
-        /// Số người tối đa. >1 để còn khoá đúng một chủ thể khi nhiều người trong khung.
+        /// Số người tối đa. Vision hiện trả người nổi bật nhất; >1 dành cho tương lai.
         var numPoses: Int = 1
     }
 
@@ -41,52 +39,37 @@ nonisolated final class PoseDetector: NSObject, PoseLandmarkerLiveStreamDelegate
     }
 
     private let config: Config
-    /// Gọi mỗi khi có kết quả. Chạy trên luồng nền của MediaPipe, KHÔNG phải luồng giao diện.
+    /// Gọi mỗi khi có kết quả. Chạy trên luồng nền, KHÔNG phải luồng giao diện.
     private let onResult: (PoseFrame, InferenceStats) -> Void
     private let onError: (String) -> Void
-    /// Khung hình ĐÃ XOAY ĐÚNG CHIỀU, để nơi khác dùng lại.
-    ///
-    /// Hiện chỉ dùng cho nhận diện khuôn mặt thời gian thực. Ảnh chân dung lấy
-    /// hướng mẫu và góc ngửa/chúc từ khuôn mặt.
-    ///
-    /// ⚠️ Dùng lại đúng tấm khung này thay vì giải mã lần nữa: giải mã và xoay là
-    /// phần đắt nhất của vòng lặp, làm hai lần là tự cắt đôi tốc độ khung hình.
-    ///
-    /// ⚠️ Chạy trên LUỒNG CAMERA. Bên nhận phải trả về ngay và đẩy việc nặng sang
-    /// luồng khác, nếu không camera nghẽn.
+    /// Khung hình ĐÃ DỰNG ĐÚNG CHIỀU cho nơi khác dùng lại (nhận diện khuôn mặt).
+    /// Chỉ dựng khi có người nhận — dựng ảnh cần CIContext, chỉ làm khi thật cần.
     private let onFrameImage: ((UIImage) -> Void)?
 
-    /// Khoá bảo vệ [landmarker].
+    /// Khoá bảo vệ cờ trạng thái.
     ///
-    /// ⚠️ BẮT BUỘC. Luồng phân tích của camera gọi [detect] còn luồng giao diện
-    /// gọi [close]. Nếu đóng đúng lúc một khung hình đang được gửi đi, MediaPipe
-    /// sẽ gọi vào vùng nhớ vừa giải phóng và **sập ở tầng C++** (SIGSEGV/SIGBUS)
-    /// — không phải lỗi Swift nên không có thông báo nào, app chỉ tắt ngóm.
+    /// ⚠️ BẮT BUỘC. Luồng camera gọi [detect] còn luồng giao diện gọi [close]. Phải
+    /// chặn không cho khung hình mới khởi động sau khi chủ đã bỏ rơi bộ nhận diện.
     private let lock = NSLock()
 
-    private var landmarker: PoseLandmarker?
+    /// Hàng đợi suy luận — Vision chạy ĐỒNG BỘ, tách khỏi luồng camera để không nghẽn.
+    private let queue = DispatchQueue(label: "com.posecoach.poseDetector.vision",
+                                      qos: .userInitiated)
 
-    /// Chủ đã gọi [close] rồi — `setup()` chạy SAU đó (nạp model chạy nền, có
-    /// thể về muộn hơn lúc người dùng rời màn) thì KHÔNG được nạp lại, nếu không
-    /// bộ nhận diện sẽ hồi sinh ngoài tầm quản lý và rò rỉ đồ thị C++.
+    private var ready = false
+
+    /// Chủ đã gọi [close] rồi — `setup()` chạy SAU đó (nạp chạy nền, có thể về muộn
+    /// hơn lúc người dùng rời màn) thì KHÔNG được đánh thức lại.
     private var closed = false
 
-    /// Thời điểm gửi khung hình đi, để tính thời gian nhận diện khi kết quả quay về.
-    private var sentAtMs: Int64 = 0
-
-    /// Mốc thời gian của khung hình gửi gần nhất. MediaPipe ở chế độ LIVE_STREAM đòi
-    /// mốc thời gian phải TĂNG NGHIÊM NGẶT; hai khung hình rơi vào cùng một mili-giây
-    /// sẽ làm nó ném lỗi. Máy càng nhanh càng dễ dính.
-    private var lastSentTimestamp: Int64 = 0
-
-    private var lastInputWidth = 0
-    private var lastInputHeight = 0
-    private var lastRotation = 0
+    /// Đang có một khung hình chạy suy luận. Khung mới tới trong lúc bận sẽ BỎ —
+    /// thà bỏ khung còn hơn xếp hàng làm trễ hình.
+    private var busy = false
 
     var isReady: Bool {
         lock.lock()
         defer { lock.unlock() }
-        return landmarker != nil
+        return ready && !closed
     }
 
     init(config: Config = Config(),
@@ -97,235 +80,120 @@ nonisolated final class PoseDetector: NSObject, PoseLandmarkerLiveStreamDelegate
         self.onResult = onResult
         self.onError = onError
         self.onFrameImage = onFrameImage
-        super.init()
     }
 
+    /// Vision không cần nạp model, nhưng giữ nguyên API: `setup()` chỉ đánh dấu sẵn
+    /// sàng. Chạy được cả trên luồng nền (tương thích cách gọi cũ).
     func setup() {
-        // Dọn bộ cũ nếu có (setup lần hai). KHÔNG gọi `close()` ở đây: `close()`
-        // nghĩa là CHỦ ĐÃ BỎ RƠI, còn đây là bắt đầu nạp — gộp hai nghĩa là
-        // `setup()` chạy nền sau khi rời màn sẽ tự đánh thức bộ nhận diện.
         lock.lock()
-        var old = landmarker
-        landmarker = nil
-        let daBoRoi = closed
+        if !closed { ready = true }
         lock.unlock()
-        if old != nil {
-            // Huỷ bộ cũ đúng trong MediaPipeGuard (FOOTGUNS 17) — gán nil trong
-            // khoá không-escaping để instance thực sự chết ở đó.
-            MediaPipeGuard.shared.serialized { old = nil }
-        }
-        guard !daBoRoi else { return }
-
-        do {
-            let baseOptions = BaseOptions()
-            baseOptions.modelAssetPath = Self.modelAssetPath(for: config.modelAsset)
-            baseOptions.delegate = config.delegate
-
-            let options = PoseLandmarkerOptions()
-            options.baseOptions = baseOptions
-            options.minPoseDetectionConfidence = config.minPoseDetectionConfidence
-            options.minPosePresenceConfidence = config.minPosePresenceConfidence
-            options.minTrackingConfidence = config.minTrackingConfidence
-            options.numPoses = config.numPoses
-            // LIVE_STREAM: kết quả trả về BẤT ĐỒNG BỘ qua delegate. Không được
-            // chờ kết quả trong luồng camera - sẽ nghẽn (FOOTGUNS mục 4 của
-            // camera-and-pose.md).
-            options.runningMode = .liveStream
-            options.poseLandmarkerLiveStreamDelegate = self
-
-            // Tạo phải đi qua khoá dùng chung (FOOTGUNS mục 17).
-            let created = try MediaPipeGuard.shared.serialized {
-                try PoseLandmarker(options: options)
-            }
-            lock.lock()
-            if closed {
-                // Chủ gọi `close()` NGAY TRONG LÚC nạp (người dùng rời màn) —
-                // không được giao bộ nhận diện cho chủ đã bỏ. Giao tạm vào chỗ
-                // chứa rồi để `close()` thu dọn: huỷ diễn ra đúng dưới khoá
-                // MediaPipeGuard, qua đúng một đường duy nhất.
-                landmarker = created
-                lock.unlock()
-                close()
-                return
-            }
-            landmarker = created
-            lastSentTimestamp = 0
-            lock.unlock()
-        } catch {
-            // Nguyên nhân hay gặp nhất: thiếu file model trong bundle, hoặc tên
-            // tài nguyên sai (phải là "pose_landmarker_full.task" — KHÔNG đóng
-            // gói nén như Android).
-            NSLog("PoseDetector: Không khởi tạo được bộ nhận diện — \(error)")
-            onError("Không nạp được model nhận diện: \(error.localizedDescription)")
-        }
     }
 
     func close() {
         lock.lock()
         closed = true
-        // Tạo/huỷ phải đi qua khoá dùng chung. iOS không có landmarker.close();
-        // gán nil là huỷ — MediaPipeGuard.serialized bọc đúng lúc này (FOOTGUNS 17).
-        MediaPipeGuard.shared.serialized {
-            landmarker = nil
-        }
+        ready = false
         lock.unlock()
     }
 
     /// Đưa một khung hình từ camera vào nhận diện.
     ///
-    /// Gọi từ luồng phân tích của camera. Hàm này trả về NGAY, kết quả tới sau
-    /// qua [onResult]. Bên gọi không phải giữ pixel buffer sau khi hàm trả về
-    /// (MPImage retain trong suốt thời gian detectAsync xử lý).
+    /// Gọi từ luồng phân tích của camera. Hàm trả về NGAY; kết quả tới sau qua
+    /// [onResult]. Bên gọi KHÔNG phải giữ pixel buffer sau khi hàm trả về — buffer
+    /// được giữ tới khi suy luận xong.
     ///
-    /// - Parameter pixelBuffer: khung BGRA từ `AVCaptureVideoDataOutput`
-    ///   (bắt buộc `kCVPixelFormatType_32BGRA`, xem MPPPoseLandmarker.h).
-    /// - Parameter orientationDegrees: góc quay ĐỂ HIỂN THỊ đúng chiều, degrees.
-    ///   Khớp `imageInfo.rotationDegrees` của CameraX: 0/90/180/270.
+    /// - Parameter pixelBuffer: khung BGRA từ `AVCaptureVideoDataOutput`.
+    /// - Parameter orientationDegrees: góc quay ĐỂ HIỂN THỊ đúng chiều. Khớp
+    ///   `imageInfo.rotationDegrees` của CameraX: 0/90/180/270.
     func detect(pixelBuffer: CVPixelBuffer, orientationDegrees: Int = 0) {
-        // Kiểm nhanh trước khi làm việc nặng, tránh xử lý vô ích khi đã đóng.
         lock.lock()
-        let lm = landmarker
-        lock.unlock()
-        if lm == nil { return }
-
-        // MediaPipe iOS áp rotation theo orientation của MPImage (xem MPPImage.h):
-        // inference chạy trên bản sao ĐÃ XOAY theo orientation. Không cần xoay
-        // pixels tay như bản Android (Bitmap.rotate) — giữ nguyên kết quả toạ độ
-        // trong khung hình dựng đứng.
-        let orientation = Self.uiOrientation(fromDegrees: orientationDegrees)
-        let mpImage: MPImage
-        do {
-            mpImage = try MPImage(pixelBuffer: pixelBuffer, orientation: orientation)
-        } catch {
-            onError("Không tạo được MPImage từ khung camera — \(error.localizedDescription)")
-            return
-        }
-
-        // Kích thước SAU khi xoay — khớp với bitmap đã rotate của bản Android,
-        // vì MediaPipe cũng chạy inference trên ảnh đã xoay.
-        let srcW = Int(mpImage.width)
-        let srcH = Int(mpImage.height)
-        let upright = orientationDegrees % 180 != 0
-
-        // Toàn bộ phần chạm vào MediaPipe nằm trong khoá. `detectAsync` trả về ngay
-        // (xử lý thật diễn ra ở luồng khác của thư viện) nên giữ khoá ở đây không
-        // gây nghẽn camera.
-        lock.lock()
-        guard let lm2 = landmarker else {
+        if !ready || closed || busy {
             lock.unlock()
             return
         }
-
-        lastInputWidth = upright ? srcH : srcW
-        lastInputHeight = upright ? srcW : srcH
-        lastRotation = orientationDegrees
-
-        // Ép mốc thời gian tăng nghiêm ngặt. Hai khung hình rơi vào cùng một
-        // mili-giây sẽ làm MediaPipe ném lỗi ở chế độ LIVE_STREAM.
-        let now = Self.uptimeMs()
-        let ts = now > lastSentTimestamp ? now : lastSentTimestamp + 1
-        sentAtMs = ts
-        lastSentTimestamp = ts
-
-        do {
-            _ = try lm2.detectAsync(image: mpImage, timestampInMilliseconds: Int(ts))
-        } catch {
-            lock.unlock()
-            onError("Lỗi khi gửi khung hình vào bộ nhận diện: \(error.localizedDescription)")
-            return
-        }
+        busy = true
         lock.unlock()
 
-        // Ảnh khung cho nơi khác dùng lại: UIImage mang đúng imageOrientation =
-        // góc đã truyền vào. Tầng sau đi qua MPImage(uiImage:) sẽ tự xoay theo
-        // orientation này — không phải giải mã/xoay lại.
-        if let cgImage = Self.copyCGImage(from: pixelBuffer) {
-            onFrameImage?(UIImage(cgImage: cgImage, scale: 1, orientation: orientation))
+        // Vision áp hướng xoay lên ảnh trước khi suy khớp — không xoay pixel tay.
+        let orientation = VisionPose.cgOrientation(fromDegrees: orientationDegrees)
+        let upright = ((orientationDegrees % 360) + 360) % 360 % 180 != 0
+        let rawW = CVPixelBufferGetWidth(pixelBuffer)
+        let rawH = CVPixelBufferGetHeight(pixelBuffer)
+        // Kích thước SAU khi xoay — khớp tỉ lệ khung mà tầng cắt hình dùng để crop.
+        let srcW = upright ? rawH : rawW
+        let srcH = upright ? rawW : rawH
+        let sent = Self.uptimeMs()
+
+        queue.async { [weak self] in
+            guard let self else { return }
+            let frame = VisionPose.frame(fromPixelBuffer: pixelBuffer,
+                                         orientation: orientation)
+
+            self.lock.lock()
+            self.busy = false
+            let daDong = self.closed
+            self.lock.unlock()
+            if daDong { return }
+
+            guard let frame else {
+                self.onError("Không chạy được nhận diện khung xương (Vision).")
+                return
+            }
+            let stats = InferenceStats(inferenceTimeMs: Self.uptimeMs() - sent,
+                                       inputWidth: srcW,
+                                       inputHeight: srcH,
+                                       rotationDegrees: orientationDegrees)
+            self.onResult(frame, stats)
+
+            // Chỉ dựng ảnh khung khi có người nhận (tránh CIContext vô ích).
+            if let onFrameImage = self.onFrameImage,
+               let cg = Self.copyCGImage(from: pixelBuffer) {
+                onFrameImage(UIImage(cgImage: cg, scale: 1,
+                                     orientation: UIImage.Orientation(orientation)))
+            }
         }
     }
 
-    /// Tiện cho đường ảnh UIImage đã dựng đứng (không qua camera).
+    /// Đường ảnh UIImage đã dựng đứng (không qua camera).
     func detect(image: UIImage) {
         lock.lock()
-        let lm = landmarker
-        lock.unlock()
-        if lm == nil { return }
-
-        // MPImage(uiImage:) lấy orientation từ chính UIImage (imageOrientation) —
-        // đúng thứ UprightBitmap trả về.
-        let mpImage: MPImage
-        do {
-            mpImage = try MPImage(uiImage: image)
-        } catch {
-            onError("Không tạo được MPImage từ UIImage — \(error.localizedDescription)")
-            return
-        }
-
-        let w = Int(mpImage.width)
-        let h = Int(mpImage.height)
-
-        lock.lock()
-        guard let lm2 = landmarker else {
+        if !ready || closed || busy {
             lock.unlock()
             return
         }
-
-        lastInputWidth = w
-        lastInputHeight = h
-        lastRotation = 0
-
-        let now = Self.uptimeMs()
-        let ts = now > lastSentTimestamp ? now : lastSentTimestamp + 1
-        sentAtMs = ts
-        lastSentTimestamp = ts
-
-        do {
-            _ = try lm2.detectAsync(image: mpImage, timestampInMilliseconds: Int(ts))
-        } catch {
-            lock.unlock()
-            onError("Lỗi khi gửi khung hình vào bộ nhận diện: \(error.localizedDescription)")
-            return
-        }
+        busy = true
         lock.unlock()
 
-        onFrameImage?(image)
+        let orientation = CGImagePropertyOrientation(image.imageOrientation)
+        let sent = Self.uptimeMs()
+
+        queue.async { [weak self] in
+            guard let self else { return }
+            let frame = image.cgImage.flatMap {
+                VisionPose.frame(fromCGImage: $0, orientation: orientation)
+            }
+
+            self.lock.lock()
+            self.busy = false
+            let daDong = self.closed
+            self.lock.unlock()
+            if daDong { return }
+
+            self.onFrameImage?(image)
+            guard let frame else {
+                self.onError("Không chạy được nhận diện khung xương (Vision).")
+                return
+            }
+            let stats = InferenceStats(inferenceTimeMs: Self.uptimeMs() - sent,
+                                       inputWidth: image.cgImage?.width ?? Int(image.size.width),
+                                       inputHeight: image.cgImage?.height ?? Int(image.size.height),
+                                       rotationDegrees: 0)
+            self.onResult(frame, stats)
+        }
     }
 
-    // Delegate của PoseLandmarker — chạy trên luồng riêng của thư viện MediaPipe,
-    // KHÔNG phải MainActor. Không dispatch về main ở đây (Android cũng vậy).
-    func poseLandmarker(_ poseLandmarker: PoseLandmarker,
-                        didFinishDetection result: PoseLandmarkerResult?,
-                        timestampInMilliseconds: Int,
-                        error: Error?) {
-        if let error {
-            onError(error.localizedDescription)
-            return
-        }
-        guard let result else { return }
-
-        lock.lock()
-        let sent = sentAtMs
-        let stats = InferenceStats(inferenceTimeMs: Self.uptimeMs() - sent,
-                                   inputWidth: lastInputWidth,
-                                   inputHeight: lastInputHeight,
-                                   rotationDegrees: lastRotation)
-        lock.unlock()
-
-        let landmarks = result.landmarks
-        if landmarks.isEmpty {
-            onResult(PoseFrame(points: [], visibility: [], world: [], timestampMs: Int64(result.timestampInMilliseconds)), stats)
-            return
-        }
-        // numPoses = 1 nên chỉ có một người. Khi bật nhiều người, chỗ này là nơi
-        // sẽ cắm logic khoá chủ thể (chọn khung bao lớn nhất rồi bám theo).
-        let world = result.worldLandmarks.first ?? []
-        onResult(
-            PoseFrame.from(landmarks: landmarks[0],
-                           worldLandmarks: world,
-                           timestampMs: Int64(result.timestampInMilliseconds)),
-            stats,
-        )
-    }
+    private var onFrameImageWanted: Bool { onFrameImage != nil }
 
     // MARK: - Helpers
 
@@ -335,20 +203,8 @@ nonisolated final class PoseDetector: NSObject, PoseLandmarkerLiveStreamDelegate
         Int64(DispatchTime.now().uptimeNanoseconds / 1_000_000)
     }
 
-    /// Ánh xạ góc CameraX → UIImage.Orientation để MPImage tự xoay khi inference.
-    ///
-    /// 90° CameraX (xoay 90° CW để hiển thị đúng) ↔ `.right` (MediaPipe xoay 90° CW).
-    static func uiOrientation(fromDegrees degrees: Int) -> UIImage.Orientation {
-        switch ((degrees % 360) + 360) % 360 {
-        case 90: return .right
-        case 180: return .down
-        case 270: return .left
-        default: return .up
-        }
-    }
-
-    /// Đường dẫn ABSOLUTE tới model trong bundle app. MediaPipe iOS cần đường dẫn
-    /// tuyệt đối, khác Android (asset name tương đối trong APK).
+    /// Đường dẫn ABSOLUTE tới model trong bundle. Giữ lại cho API tương thích cũ;
+    /// Vision không dùng.
     static func modelAssetPath(for assetName: String) -> String {
         let ns = assetName as NSString
         let base = ns.deletingPathExtension

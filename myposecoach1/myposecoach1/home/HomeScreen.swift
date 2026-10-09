@@ -240,8 +240,8 @@ struct HomeScreen: View {
         Task { @MainActor in
             // Phân tích MỘT LẦN rồi dùng cho cả cổng kiểm lẫn hồ sơ tiêu chí.
             //
-            // ⚠️ PHẢI tách luồng nền: `phanTichAnhMau` nạp model MediaPipe (~9MB)
-            // và giải mã ảnh — đặt lên main là màn hình đứng im 1-2 giây mỗi lần bấm.
+            // ⚠️ PHẢI tách luồng nền: `phanTichAnhMau` giải mã ảnh và chạy Vision
+            // — đặt lên main là màn hình đứng im 1-2 giây mỗi lần bấm.
             // Tương đương `withContext(Dispatchers.Default)` bên Android.
             let kq = await Task.detached(priority: .userInitiated) {
                 phanTichAnhMau(file: file)
