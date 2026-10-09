@@ -21,5 +21,11 @@ xcrun swiftc -typecheck \
   -target arm64-apple-ios18.0-simulator \
   -swift-version 5 \
   -default-isolation MainActor \
+  -enable-upcoming-feature DisableOutwardActorInference \
+  -enable-upcoming-feature InferSendableFromCaptures \
+  -enable-upcoming-feature GlobalActorIsolatedTypesUsability \
+  -enable-upcoming-feature MemberImportVisibility \
+  -enable-upcoming-feature InferIsolatedConformances \
+  -enable-upcoming-feature NonisolatedNonsendingByDefault \
   "${FR[@]}" \
   "${SOURCES[@]}"

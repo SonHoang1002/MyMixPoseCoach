@@ -15,6 +15,8 @@ struct myposecoach1App: App {
         // huống sinh ra rác (xem `ShotStore`).
         ShotStore.sweepOrphans()
         ShotStore.sweepRecordings()
+        // Chép thư viện ảnh mẫu cài sẵn ra thư mục làm việc.
+        MediaLibrary.seedBuiltInTemplates()
     }
 
     var body: some Scene {

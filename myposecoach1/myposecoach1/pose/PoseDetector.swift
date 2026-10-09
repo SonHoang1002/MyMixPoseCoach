@@ -66,6 +66,11 @@ nonisolated final class PoseDetector: NSObject, PoseLandmarkerLiveStreamDelegate
 
     private var landmarker: PoseLandmarker?
 
+    /// Chủ đã gọi [close] rồi — `setup()` chạy SAU đó (nạp model chạy nền, có
+    /// thể về muộn hơn lúc người dùng rời màn) thì KHÔNG được nạp lại, nếu không
+    /// bộ nhận diện sẽ hồi sinh ngoài tầm quản lý và rò rỉ đồ thị C++.
+    private var closed = false
+
     /// Thời điểm gửi khung hình đi, để tính thời gian nhận diện khi kết quả quay về.
     private var sentAtMs: Int64 = 0
 
@@ -96,7 +101,21 @@ nonisolated final class PoseDetector: NSObject, PoseLandmarkerLiveStreamDelegate
     }
 
     func setup() {
-        close()
+        // Dọn bộ cũ nếu có (setup lần hai). KHÔNG gọi `close()` ở đây: `close()`
+        // nghĩa là CHỦ ĐÃ BỎ RƠI, còn đây là bắt đầu nạp — gộp hai nghĩa là
+        // `setup()` chạy nền sau khi rời màn sẽ tự đánh thức bộ nhận diện.
+        lock.lock()
+        var old = landmarker
+        landmarker = nil
+        let daBoRoi = closed
+        lock.unlock()
+        if old != nil {
+            // Huỷ bộ cũ đúng trong MediaPipeGuard (FOOTGUNS 17) — gán nil trong
+            // khoá không-escaping để instance thực sự chết ở đó.
+            MediaPipeGuard.shared.serialized { old = nil }
+        }
+        guard !daBoRoi else { return }
+
         do {
             let baseOptions = BaseOptions()
             baseOptions.modelAssetPath = Self.modelAssetPath(for: config.modelAsset)
@@ -119,6 +138,16 @@ nonisolated final class PoseDetector: NSObject, PoseLandmarkerLiveStreamDelegate
                 try PoseLandmarker(options: options)
             }
             lock.lock()
+            if closed {
+                // Chủ gọi `close()` NGAY TRONG LÚC nạp (người dùng rời màn) —
+                // không được giao bộ nhận diện cho chủ đã bỏ. Giao tạm vào chỗ
+                // chứa rồi để `close()` thu dọn: huỷ diễn ra đúng dưới khoá
+                // MediaPipeGuard, qua đúng một đường duy nhất.
+                landmarker = created
+                lock.unlock()
+                close()
+                return
+            }
             landmarker = created
             lastSentTimestamp = 0
             lock.unlock()
@@ -133,6 +162,7 @@ nonisolated final class PoseDetector: NSObject, PoseLandmarkerLiveStreamDelegate
 
     func close() {
         lock.lock()
+        closed = true
         // Tạo/huỷ phải đi qua khoá dùng chung. iOS không có landmarker.close();
         // gán nil là huỷ — MediaPipeGuard.serialized bọc đúng lúc này (FOOTGUNS 17).
         MediaPipeGuard.shared.serialized {

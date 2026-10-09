@@ -321,6 +321,24 @@ final class CaptureController {
         currentRotation = Self.readInitialRotation()
 
         configure()
+
+        // CHẠY phiên chụp. `configure()` mới chỉ GẮN input/output — không có
+        // `startRunning()` thì không có buffer nào chạy, xem trước đen thui và
+        // app báo "chưa có camera" dù quyền đã cấp (bản Android bật camera trong
+        // `bindToLifecycle` nên chỗ này dễ quên khi port).
+        //
+        // ⚠️ PHẢI qua `sessionQueue`: `startRunning()` CHẶN tới khi phiên chạy
+        // thật (mở ống kính, chiếm phần cứng) — gọi trên main là bảng đứng im
+        // đúng lúc người dùng vừa bấm vào màn. Chỉ bắt đầu khi `configure()`
+        // thành công (`activeDevice != nil`) — máy không có camera thì khỏi chạy.
+        if activeDevice != nil {
+            sessionQueue.async { [session] in
+                if !session.isRunning {
+                    session.startRunning()
+                }
+            }
+        }
+
         applyRotation(currentRotation)   // cũng báo `onRotationChanged` lần đầu
         observeOrientation()
         onReady(liveDetectionActive)

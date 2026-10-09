@@ -20,8 +20,6 @@
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		E5E5C5043075435000F47AEA /* myposecoach1 */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-			);
 			path = myposecoach1;
 			sourceTree = "<group>";
 		};
@@ -45,7 +43,6 @@
 				8B56B367A66294B94AFD25CC /* Pods-myposecoach1.debug.xcconfig */,
 				E47F985D6D10C98E671096ED /* Pods-myposecoach1.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
