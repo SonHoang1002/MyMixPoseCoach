@@ -16,6 +16,7 @@ import SwiftUI
 ///   - onLuu: file đã đổi tên theo nhãn + kết quả phân tích (để khỏi phân tích lại).
 struct NhapAnhSheet: View {
     let file: URL
+    let truoc: KetQuaNhap?
     let onHuy: () -> Void
     let onChonAnhKhac: () -> Void
     let onLuu: (URL, PhanTichAnhMau) -> Void
@@ -93,19 +94,14 @@ struct NhapAnhSheet: View {
         guard !Task.isCancelled else { return }
         anh = preview
 
-        let k = await Task.detached(priority: .userInitiated) {
-            phanTichAnhMau(file: file)
-        }.value
-        guard !Task.isCancelled else { return }
-
-        // Kiểu chụp ĐOÁN sẵn theo khung hình — ảnh chân dung gần như luôn là selfie —
-        // nhưng hiện rõ trên nút để đổi được. Góc máy thì KHÔNG đoán (FOOTGUNS 88).
-        if let f = k.framing, f == .chest || f == .head {
-            kieu = .SELFIE
-        } else {
-            kieu = .PHOTOGRAPHER
+        let detected = if let truoc { truoc } else {
+            await Task.detached(priority: .userInitiated) { nhanDienNhap(file: file) }.value
         }
-        kq = k
+        guard !Task.isCancelled else { return }
+        kieu = detected.kieu
+        goc = detected.goc
+        kieuTren = detected.kieuTren
+        kq = detected.phanTich
     }
 
     // MARK: - Nội dung dưới ảnh xem trước

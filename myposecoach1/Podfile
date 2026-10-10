@@ -3,7 +3,9 @@ platform :ios, '18.0'
 target 'myposecoach1' do
   use_frameworks!
 
-  # MediaPipeTasksVision ĐÃ BỎ (2026-10): bản 1.0.0 sập trên iOS 27 vì dựng
-  # pipeline Metal riêng (AGXA13FamilyFunctionHandle resourceIndex). Nhận diện
-  # khung xương nay dùng Apple Vision — xem myposecoach1/pose/VisionPose.swift.
+  # Cùng engine nhận diện mặt và nhãn ảnh với Android.
+  pod 'GoogleMLKit/FaceDetection', '8.0.0'
+  pod 'GoogleMLKit/ImageLabeling', '8.0.0'
+
+  # Pose dùng MediaPipe 1.1.0 qua Swift Package Manager, ghim revision trong project.pbxproj.
 end

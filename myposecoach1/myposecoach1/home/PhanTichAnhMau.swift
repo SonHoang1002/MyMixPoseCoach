@@ -5,9 +5,8 @@ import UIKit
 /// và bảng gắn nhãn ảnh tự nhập, để không phân tích lại và chắc chắn các bên nói về
 /// cùng một kết quả.
 ///
-/// Bản port từ `home/PhanTichAnhMau.kt` của Android. Khác một chỗ: **bản Android
-/// nhận diện mặt bằng ML Kit, bản iOS dùng `FaceAnalyzer` (Apple Vision
-/// `VNDetectFaceRectanglesRequest`)** — `face` có thể là `nil` khi không thấy mặt
+/// Bản port từ `home/PhanTichAnhMau.kt` của Android. Hai nền tảng cùng dùng
+/// MediaPipe và ML Kit; `face` có thể là `nil` khi không thấy mặt
 /// (mẫu quay lưng) hoặc khi `eyesOpen` chưa đo được; các mốc dựa vào nó sẽ do
 /// `TemplateProfile.from` tự bỏ qua và ghi lý do, đúng luật
 /// "mục không đo được thì bỏ ra, không trừ điểm".
@@ -17,6 +16,8 @@ nonisolated struct PhanTichAnhMau {
     let face: FaceInfo?
     let poseGuide: [String]
     let difficulty: PoseDescriber.Difficulty?
+    let taiChan: Double?
+    let coTayNgoaiKhung: Int?
 
     var framing: FramingClass? {
         if case .Accepted(let f, _) = verdict { return f }
@@ -65,6 +66,18 @@ nonisolated func phanTichAnhMau(file: URL) -> PhanTichAnhMau {
         frame: frame,
         face: face,
         poseGuide: guide,
-        difficulty: diff
+        difficulty: diff,
+        taiChan: {
+            guard let f = frame, let image = bmp else { return nil }
+            return DoanKieuTren.tiLeTaiChan(
+                f, rong: Int(image.size.width), cao: Int(image.size.height)
+            )
+        }(),
+        coTayNgoaiKhung: frame.flatMap { f in
+            guard !f.isEmpty else { return nil }
+            return [Lm.leftWrist, Lm.rightWrist].filter {
+                f.at($0, minVisibility: TemplateGate.CORE_VIS) == nil
+            }.count
+        }
     )
 }

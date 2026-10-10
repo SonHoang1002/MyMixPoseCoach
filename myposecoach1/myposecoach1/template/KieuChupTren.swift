@@ -49,3 +49,38 @@ nonisolated enum KieuChupTren: String, CaseIterable, Hashable {
         return KieuChupTren(rawValue: tu)
     }
 }
+
+/// Ghép góc mở từ GeoCalib với tỉ lệ đầu/chân từ MediaPipe, cùng luật Android.
+nonisolated enum DoanKieuTren {
+    static let VFOV_RONG = 75.0
+    static let TAI_CHAN_GAN = 0.45
+    static let TAI_CHAN_XA = 0.35
+
+    static func doan(vfovDeg: Double?, taiChan: Double?) -> KieuChupTren? {
+        if let vfovDeg, vfovDeg >= VFOV_RONG { return .gan }
+        if let taiChan, taiChan >= TAI_CHAN_GAN { return .gan }
+        if let taiChan, taiChan <= TAI_CHAN_XA { return .xaZoom }
+        return nil
+    }
+
+    static func tiLeTaiChan(
+        _ frame: PoseFrame,
+        rong: Int,
+        cao: Int,
+        minVisibility: Float = 0.5
+    ) -> Double? {
+        func phongDai(_ a: Int, _ b: Int) -> Double? {
+            guard let pa = frame.at(a, minVisibility: minVisibility),
+                  let pb = frame.at(b, minVisibility: minVisibility),
+                  let wa = frame.world(a, minVisibility: minVisibility),
+                  let wb = frame.world(b, minVisibility: minVisibility) else { return nil }
+            let anh = hypot((pa.x - pb.x) * Double(rong), (pa.y - pb.y) * Double(cao))
+            let dx = wa.x - wb.x, dy = wa.y - wb.y, dz = wa.z - wb.z
+            let that = sqrt(dx * dx + dy * dy + dz * dz)
+            return that > 1e-3 && anh > 1 ? anh / that : nil
+        }
+        guard let tai = phongDai(Lm.leftEar, Lm.rightEar),
+              let chan = phongDai(Lm.leftAnkle, Lm.rightAnkle) else { return nil }
+        return log(tai / chan)
+    }
+}

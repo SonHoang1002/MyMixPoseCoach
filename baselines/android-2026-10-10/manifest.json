@@ -1,0 +1,1665 @@
+{
+  "branch": "phuong-an-tich-hop",
+  "commit": "5993ab38a0dcac0c77c7835b5b8bf010052deb57",
+  "status": "M AGENTS.md\n M CLAUDE.md\n M FOOTGUNS.md\n M THU_NGHIEM_BOI_CANH.md\n M app/app/build.gradle.kts\n M app/app/src/main/AndroidManifest.xml\n M app/app/src/main/java/com/example/posecoach/MainActivity.kt\n M app/app/src/main/java/com/example/posecoach/camera/CaptureController.kt\n M app/app/src/main/java/com/example/posecoach/capture/CaptureScreen.kt\n M app/app/src/main/java/com/example/posecoach/capture/CaptureUiState.kt\n M app/app/src/main/java/com/example/posecoach/capture/CaptureViewModel.kt\n M app/app/src/main/java/com/example/posecoach/core/data/SceneRepository.kt\n M app/app/src/main/java/com/example/posecoach/guidance/CameraPrep.kt\n M app/app/src/main/java/com/example/posecoach/guidance/CuePresenter.kt\n M app/app/src/main/java/com/example/posecoach/guidance/DistanceEstimator.kt\n M app/app/src/main/java/com/example/posecoach/guidance/GuidanceEngine.kt\n M app/app/src/main/java/com/example/posecoach/guidance/PoseDescriber.kt\n M app/app/src/main/java/com/example/posecoach/home/HomeScreen.kt\n M app/app/src/main/java/com/example/posecoach/home/NhapAnhSheet.kt\n M app/app/src/main/java/com/example/posecoach/home/PhanTichAnhMau.kt\n M app/app/src/main/java/com/example/posecoach/library/LibraryScreen.kt\n M app/app/src/main/java/com/example/posecoach/media/MediaLibrary.kt\n M app/app/src/main/java/com/example/posecoach/pose/FramingClass.kt\n M app/app/src/main/java/com/example/posecoach/pose/PoseDetector.kt\n M app/app/src/main/java/com/example/posecoach/result/ResultScreen.kt\n M app/app/src/main/java/com/example/posecoach/result/ResultUiState.kt\n M app/app/src/main/java/com/example/posecoach/result/ResultViewModel.kt\n M app/app/src/main/java/com/example/posecoach/scene/SceneAction.kt\n M app/app/src/main/java/com/example/posecoach/scene/SceneMatch.kt\n M app/app/src/main/java/com/example/posecoach/scene/SceneScreen.kt\n M app/app/src/main/java/com/example/posecoach/scene/SceneUiState.kt\n M app/app/src/main/java/com/example/posecoach/scene/SceneViewModel.kt\n M app/app/src/main/java/com/example/posecoach/template/KieuChupTren.kt\n M app/app/src/main/java/com/example/posecoach/template/TemplateGate.kt\n M app/app/src/main/java/com/example/posecoach/template/TemplateProfile.kt\n M app/app/src/main/java/com/example/posecoach/ui/GuidanceOverlay.kt\n M app/app/src/main/res/values/strings.xml\n M app/app/src/test/java/com/example/posecoach/CongKiemVaHuongMayTest.kt\n M app/app/src/test/java/com/example/posecoach/CuePresenterTest.kt\n M app/app/src/test/java/com/example/posecoach/FailedCriteriaTest.kt\n M app/app/src/test/java/com/example/posecoach/KieuChupTrenTest.kt\n M app/app/src/test/java/com/example/posecoach/MirrorSelfieTest.kt\n M app/app/src/test/java/com/example/posecoach/RollCriterionTest.kt\n M app/app/src/test/java/com/example/posecoach/SilentDeadlockTest.kt\n M app/app/src/test/java/com/example/posecoach/ThoiQuenChupTest.kt\n M app/app/src/test/java/com/example/posecoach/VideoTest1309Test.kt\n M app/app/src/test/java/com/example/posecoach/VideoTest1909Test.kt\n M app/gradle/libs.versions.toml\n?? app/app/src/main/java/com/example/posecoach/core/data/LanguageRepository.kt\n?? app/app/src/main/java/com/example/posecoach/scene/SceneCamera.kt\n?? app/app/src/main/java/com/example/posecoach/scene/SceneCameraScreen.kt\n?? app/app/src/main/java/com/example/posecoach/scene/SceneVocabulary.kt\n?? app/app/src/main/java/com/example/posecoach/settings/\n?? app/app/src/main/java/com/example/posecoach/ui/UiText.kt\n?? app/app/src/main/res/values-vi/\n?? app/app/src/main/res/xml/locales_config.xml\n?? app/app/src/test/java/com/example/posecoach/AppLanguageTest.kt\n?? app/app/src/test/java/com/example/posecoach/SceneVocabularyTest.kt\n?? app/app/src/test/java/com/example/posecoach/StringsParityTest.kt\n?? app/app/src/test/java/com/example/posecoach/TestStrings.kt",
+  "files": {
+    ".claude/skills/android-native-dev/SKILL.md": {
+      "bytes": 28621,
+      "sha256": "043129d00d8fd400fa2ff6a2126471fcf01e83d57ce5749c4c75eb4009e9e909"
+    },
+    ".claude/skills/android-native-dev/references/accessibility.md": {
+      "bytes": 5732,
+      "sha256": "80f6f5950883c9ddbfe14facdc7690ef58141acaf9796d19a8f60a7600a1c792"
+    },
+    ".claude/skills/android-native-dev/references/adaptive-screens.md": {
+      "bytes": 6098,
+      "sha256": "509b0a9fb7c264675b2d78b3505d779bd1a68516ccd51146c8dfcbb50f4c0968"
+    },
+    ".claude/skills/android-native-dev/references/design-style-guide.md": {
+      "bytes": 10126,
+      "sha256": "bc7cdf92ddb8d745538603f3701de634b3793369d503728ddce7457f60ee37c3"
+    },
+    ".claude/skills/android-native-dev/references/functional-requirements.md": {
+      "bytes": 6175,
+      "sha256": "732b91d2b7091914358ed8eb752d7203fef302188c104d29bfade32df5659643"
+    },
+    ".claude/skills/android-native-dev/references/motion-system.md": {
+      "bytes": 5443,
+      "sha256": "781edd94ae6d107719adbd9ae199d358f545fa00a052fd8015842477c4d717bb"
+    },
+    ".claude/skills/android-native-dev/references/performance-stability.md": {
+      "bytes": 6334,
+      "sha256": "ac3fc3776add17cfb0f40ee57029736c480f70e2672b4bbfcdd8c3896fe2c422"
+    },
+    ".claude/skills/android-native-dev/references/privacy-security.md": {
+      "bytes": 6667,
+      "sha256": "324d84c3d6c955854cc6095f4c6a86cd4b43fe7d28980f5d453105c625ab8063"
+    },
+    ".claude/skills/android-native-dev/references/testing.md": {
+      "bytes": 17568,
+      "sha256": "a6d2cead93bc43b22e64fe5208d284fd8931474d0c6d48664f1cd009a7b43baa"
+    },
+    ".claude/skills/android-native-dev/references/visual-design.md": {
+      "bytes": 7523,
+      "sha256": "39d30ddf2e11c1659b1fd3515cdb3d1fa41ab31268cc615456ce62f407ae3a9f"
+    },
+    ".claude/skills/code-review-expert/README.md": {
+      "bytes": 2433,
+      "sha256": "a244ed1919875982e8f2508b3a45ce748282c91623574c974aae0d10a5ae58a0"
+    },
+    ".claude/skills/code-review-expert/SKILL.md": {
+      "bytes": 5544,
+      "sha256": "6fd03c8a0e6b2eec3c4b7ab5000bcb1ac2daa1202c018e70d19d33592db8482e"
+    },
+    ".claude/skills/code-review-expert/references/code-quality-checklist.md": {
+      "bytes": 4762,
+      "sha256": "331fe66d5f3849a018be43a64d46173371fe0dd680ca73b2050d4bf860d46e1d"
+    },
+    ".claude/skills/code-review-expert/references/removal-plan.md": {
+      "bytes": 1724,
+      "sha256": "b71008bd9b585ee660f76e55630e8224926d9cb711caaf8d4b7f09d885a1aa0f"
+    },
+    ".claude/skills/code-review-expert/references/security-checklist.md": {
+      "bytes": 4538,
+      "sha256": "4b9a19355fab47d93079cf52fcab18dcae94dbec594ef9a151ef975b239ad05c"
+    },
+    ".claude/skills/code-review-expert/references/solid-checklist.md": {
+      "bytes": 2809,
+      "sha256": "ef153bd9a2a093b43da4769d4e441c91113938bf18d2feb4b388eb554dc19096"
+    },
+    ".claude/skills/compose-animations/SKILL.md": {
+      "bytes": 3942,
+      "sha256": "a10961d3251f680a57c4481b75ea0111ea78dcb373aac6b308ee55f9d2a7676d"
+    },
+    ".claude/skills/compose-animations/references/animated-content.md": {
+      "bytes": 1523,
+      "sha256": "5e2886bd7f1c0e8884fe60d38ac04e0c23b45f5693026da38cfaf5e1cc31b1df"
+    },
+    ".claude/skills/compose-component-design/SKILL.md": {
+      "bytes": 2497,
+      "sha256": "caddd421c755aba30472e08892b0989f7ab9094b85043e2d498a5dbbcfa4e2b0"
+    },
+    ".claude/skills/compose-component-design/references/modifier-layout.md": {
+      "bytes": 2827,
+      "sha256": "94dea06dbfbff57276da0f7eb0e445b60616049c03ecef591c7f2b26ee52afc0"
+    },
+    ".claude/skills/compose-component-design/references/slot-apis.md": {
+      "bytes": 2461,
+      "sha256": "08fd24b6bee03879aaa71f69ebf504e6a0990ff761795a6f1ac99379c8ef79ad"
+    },
+    ".claude/skills/compose-focus-navigation/SKILL.md": {
+      "bytes": 3772,
+      "sha256": "b2626ba9299da86f437e98ce0554963f0f393ee7ce71f255846e11c56c1a9134"
+    },
+    ".claude/skills/compose-performance/SKILL.md": {
+      "bytes": 2511,
+      "sha256": "3d046ede84ad9574fa9160d719f977d83c5b7666da0952af8fd8a07087925a12"
+    },
+    ".claude/skills/compose-performance/references/composition-contracts.md": {
+      "bytes": 1166,
+      "sha256": "73362e6ac08547141128de67f98a068e3904b8afd29e858ff273ecffebbcf719"
+    },
+    ".claude/skills/compose-performance/references/deferred-reads.md": {
+      "bytes": 2725,
+      "sha256": "c57117e3e95c9a9b72d64c54e9d084cb4eb5bf22ec29792fd7332f2352e44644"
+    },
+    ".claude/skills/compose-performance/references/diagnosis.md": {
+      "bytes": 2800,
+      "sha256": "f355f396e602dddb8d8821e7162e2dadd59fe58cbb48ca5e4ef211155fb526c8"
+    },
+    ".claude/skills/compose-performance/references/stability.md": {
+      "bytes": 2833,
+      "sha256": "f2654851d8c1ee81892e45cec26c81eba8bdd5cf73568e028a9a556603a59555"
+    },
+    ".claude/skills/compose-state-and-effects/SKILL.md": {
+      "bytes": 3317,
+      "sha256": "5e6df6c17ea43623d975d1172c69a467cfb549021e12971817073fd81dcca70f"
+    },
+    ".claude/skills/compose-state-and-effects/references/local-state.md": {
+      "bytes": 1854,
+      "sha256": "c06198d5cd5e9619ee0fc9edbd56c20d99994ed627a8d98cea2aba2e16319377"
+    },
+    ".claude/skills/compose-state-and-effects/references/side-effects.md": {
+      "bytes": 2692,
+      "sha256": "bb031647c0cd17d503079651afae4e7cfe8ba4a96a98141d5be4733351ccc38c"
+    },
+    ".claude/skills/compose-state-and-effects/references/state-hoisting.md": {
+      "bytes": 2984,
+      "sha256": "2c6a77a74ccc654a8e461e593ceb117749b1ed68a7635e62a54735afc2534951"
+    },
+    ".claude/skills/compose-ui-testing-patterns/SKILL.md": {
+      "bytes": 7656,
+      "sha256": "87bc868dcc106326a3afb01e19151f90d8b1cd218a7c49e7400e13d43e2384ba"
+    },
+    ".claude/skills/gradle-run/SKILL.md": {
+      "bytes": 4675,
+      "sha256": "2a7cf41ef89cc1c11b9bff104c340b4b127ad6757e7d55c80ae7058bf896ad0c"
+    },
+    ".claude/skills/kotlin-api-design/SKILL.md": {
+      "bytes": 2117,
+      "sha256": "49bc11f02cdcba2c55ae7b02ec70450e18a532113f716de7f812db2a20bc50df"
+    },
+    ".claude/skills/kotlin-api-design/references/functions.md": {
+      "bytes": 2611,
+      "sha256": "6bff9c0e54d576d8c42b426bb8ef33b1be37da0846262c9db0ad36565baf81ed"
+    },
+    ".claude/skills/kotlin-api-design/references/multiplatform-boundaries.md": {
+      "bytes": 4359,
+      "sha256": "6d11700892f66a4e36878c4fa9f064baf1151bc6da756967a44c0a54c18bd746"
+    },
+    ".claude/skills/kotlin-api-design/references/value-classes.md": {
+      "bytes": 4019,
+      "sha256": "e2c16078c78004f11b5acf6c41eafd27db3bf23e629827810877087b1b1051fe"
+    },
+    ".claude/skills/kotlin-concurrency-and-flow/SKILL.md": {
+      "bytes": 2412,
+      "sha256": "1f85854f681860ed37e92089341439a9ec4aa8d54cc62e0163dd00a9f29d4703"
+    },
+    ".claude/skills/kotlin-concurrency-and-flow/references/flow-state-events.md": {
+      "bytes": 2883,
+      "sha256": "dcbbe576d065061049504c94145cd3250e33b54e1ff49143fcd23d8329e43278"
+    },
+    ".claude/skills/kotlin-concurrency-and-flow/references/structured-concurrency.md": {
+      "bytes": 5218,
+      "sha256": "c6726b464150d21164986f1c08fdfc0f1a62ef907ea0416ca9fdbb1028156808"
+    },
+    ".claude/skills/kotlin-control-flow/SKILL.md": {
+      "bytes": 3364,
+      "sha256": "ac3286ea293dcd3bc5e716a368ac9b4be328bb036d029c114a8e1cca25e24220"
+    },
+    ".claude/skills/supabase-postgres-best-practices/CHANGELOG.md": {
+      "bytes": 5757,
+      "sha256": "849d982843672c2c7796cf3488b20c29538cdd304c1d64a60aec2500138059e9"
+    },
+    ".claude/skills/supabase-postgres-best-practices/SKILL.md": {
+      "bytes": 3295,
+      "sha256": "4d7d1bd60f2ad7fd0d510269279519059dcc630d832f4c241d90735244c70525"
+    },
+    ".claude/skills/supabase-postgres-best-practices/references/_contributing.md": {
+      "bytes": 4283,
+      "sha256": "b851de03355ea919862b637fdc14fefab648149cf1013b0194a17108b2d8af4c"
+    },
+    ".claude/skills/supabase-postgres-best-practices/references/_sections.md": {
+      "bytes": 1721,
+      "sha256": "ad2d6f6b0938ff844f7f8971153ab6d08a03ef6511b02fb9cee9336c7b209e93"
+    },
+    ".claude/skills/supabase-postgres-best-practices/references/_template.md": {
+      "bytes": 1074,
+      "sha256": "39e9fce3c6ae1af110f689e018d4417f3547ed0417a7b6198b207285e60bf9b8"
+    },
+    ".claude/skills/supabase-postgres-best-practices/references/advanced-full-text-search.md": {
+      "bytes": 1523,
+      "sha256": "0682b713263c5b6b9638a31f810bad07aa179bc4f79bbb787b92ed287e00fe76"
+    },
+    ".claude/skills/supabase-postgres-best-practices/references/advanced-jsonb-indexing.md": {
+      "bytes": 1493,
+      "sha256": "9bcbf7da33f6fe6fa9525680ca26d4e3412b534104cffb5f8529596d76631e4f"
+    },
+    ".claude/skills/supabase-postgres-best-practices/references/conn-idle-timeout.md": {
+      "bytes": 1328,
+      "sha256": "cd4386d0b5a2bd6d0148975f0f379016b47c7cf139b9483c4f24619c6a89f5e3"
+    },
+    ".claude/skills/supabase-postgres-best-practices/references/conn-limits.md": {
+      "bytes": 1369,
+      "sha256": "9ed6e5e3a45458a52f2863a60324a05d80da1d9f3e23bcb83b06f464f6a3cee7"
+    },
+    ".claude/skills/supabase-postgres-best-practices/references/conn-pooling.md": {
+      "bytes": 1423,
+      "sha256": "60cd5f7942c44bdf6d8622a49a2e9f0f7fd01daf8e62bd1bd66b195cd6942975"
+    },
+    ".claude/skills/supabase-postgres-best-practices/references/conn-prepared-statements.md": {
+      "bytes": 1575,
+      "sha256": "5ce48ff1e426c9b90c75c5733817fc2dd8feea9e4db3298ec9373b9cd0cf3bf8"
+    },
+    ".claude/skills/supabase-postgres-best-practices/references/data-batch-inserts.md": {
+      "bytes": 1341,
+      "sha256": "98251b608bb6cfefd28828c9e5fffc705a155f1212fa0cb82904c5bc2e417572"
+    },
+    ".claude/skills/supabase-postgres-best-practices/references/data-n-plus-one.md": {
+      "bytes": 1414,
+      "sha256": "f5c60f85f208161cd7567bb7cff0f559618814216a4426bb1351b51f75ec334d"
+    },
+    ".claude/skills/supabase-postgres-best-practices/references/data-pagination.md": {
+      "bytes": 1408,
+      "sha256": "c0bffeb6880c1f5b961e7c2ff36fd16686ebb09e5e49ed17499654beabea3e60"
+    },
+    ".claude/skills/supabase-postgres-best-practices/references/data-upsert.md": {
+      "bytes": 1440,
+      "sha256": "b366aa7da1e7929fba3011f99d949b2593967920d0c3c8572e07c0407c367054"
+    },
+    ".claude/skills/supabase-postgres-best-practices/references/lock-advisory.md": {
+      "bytes": 1587,
+      "sha256": "6d6b50c5ec9f85eb7aebbb1466e642e427c1732efa558488a9cae7ef9903febd"
+    },
+    ".claude/skills/supabase-postgres-best-practices/references/lock-deadlock-prevention.md": {
+      "bytes": 1923,
+      "sha256": "55f2074581d4db4996fc3ea1d3c120295209a70115f773e2c54f6b312405b293"
+    },
+    ".claude/skills/supabase-postgres-best-practices/references/lock-short-transactions.md": {
+      "bytes": 1400,
+      "sha256": "2538a22231c0dfde9967812b6bd5fb347287b671f72806495f89d0d0764e5fe6"
+    },
+    ".claude/skills/supabase-postgres-best-practices/references/lock-skip-locked.md": {
+      "bytes": 1407,
+      "sha256": "42c7492ba7f5d2c8ede9a5af072ea63deacf71e5695e022cae15b46b1ce4df13"
+    },
+    ".claude/skills/supabase-postgres-best-practices/references/monitor-explain-analyze.md": {
+      "bytes": 1486,
+      "sha256": "94881b47194cb164b1d2a004e79f181370af44ec830b9263e990e2710bd02b76"
+    },
+    ".claude/skills/supabase-postgres-best-practices/references/monitor-pg-stat-statements.md": {
+      "bytes": 1473,
+      "sha256": "812bf181876bacac5a2f914e7ffcf2a0a215b6d18dda752e65e75d926cbbcef4"
+    },
+    ".claude/skills/supabase-postgres-best-practices/references/monitor-vacuum-analyze.md": {
+      "bytes": 1561,
+      "sha256": "8d35221e676f13b122865d5df947a008c41367bd180010e52fde3c429e8552a9"
+    },
+    ".claude/skills/supabase-postgres-best-practices/references/query-composite-indexes.md": {
+      "bytes": 1498,
+      "sha256": "7e75d1b4d4431cb874ecc28710e95b7d2d7364511daa5d2c8e9d7de7ce1d0054"
+    },
+    ".claude/skills/supabase-postgres-best-practices/references/query-covering-indexes.md": {
+      "bytes": 1327,
+      "sha256": "028770393de8c0be6dcc7b9fb017f8209761d1854ebf433f036367e602f2d04d"
+    },
+    ".claude/skills/supabase-postgres-best-practices/references/query-index-types.md": {
+      "bytes": 1569,
+      "sha256": "5f054ce4f835091bb5ff89875deb5f8ade9e447e2ea62d1ca07382d104af0f2d"
+    },
+    ".claude/skills/supabase-postgres-best-practices/references/query-missing-indexes.md": {
+      "bytes": 1261,
+      "sha256": "15ddf120c86020612d2713225c850e0e4f022b38021f40f45e5bbe58f245dcc3"
+    },
+    ".claude/skills/supabase-postgres-best-practices/references/query-partial-indexes.md": {
+      "bytes": 1392,
+      "sha256": "106e2b88ff64115efa0a6b5f448d31788681493eeec05ad373f7c2ce6c8e0381"
+    },
+    ".claude/skills/supabase-postgres-best-practices/references/schema-constraints.md": {
+      "bytes": 1960,
+      "sha256": "d6e16d565c9832b70f8b1d472f7dc86dafa1351a44e8da72c88b48d337f73d7f"
+    },
+    ".claude/skills/supabase-postgres-best-practices/references/schema-data-types.md": {
+      "bytes": 1499,
+      "sha256": "df3197b3393f37b065396c2d3d2035d870d5d572ceaf6562e7c85559dcd11871"
+    },
+    ".claude/skills/supabase-postgres-best-practices/references/schema-foreign-key-indexes.md": {
+      "bytes": 1738,
+      "sha256": "b49a4e74ded6dd2a2bcf82d21fd22470c403b54cc526dc387f95c001c005c5d2"
+    },
+    ".claude/skills/supabase-postgres-best-practices/references/schema-lowercase-identifiers.md": {
+      "bytes": 1783,
+      "sha256": "e7e3e073df2fd787cc4e58dbfe1b7eb1f80439326042c5e73a69ae8a3b1dd734"
+    },
+    ".claude/skills/supabase-postgres-best-practices/references/schema-partitioning.md": {
+      "bytes": 1603,
+      "sha256": "d940ee09551e970f97c629e816502989c37f7dcea1df94b4b52f79f6eefc9971"
+    },
+    ".claude/skills/supabase-postgres-best-practices/references/schema-primary-keys.md": {
+      "bytes": 1882,
+      "sha256": "8e4350d0c4b0034fa843ef74716978729329543ff57fe9fad1d22e31a86ae0c5"
+    },
+    ".claude/skills/supabase-postgres-best-practices/references/security-privileges.md": {
+      "bytes": 1620,
+      "sha256": "079b20aba6ce8dbea81678fafdd95b4f9785440e91d07eb96029104597cb9693"
+    },
+    ".claude/skills/supabase-postgres-best-practices/references/security-rls-basics.md": {
+      "bytes": 1422,
+      "sha256": "e1b419ae752d06f6180a0dd61fa21cfdc2b19e34902495bd2827d3e6e350dfe3"
+    },
+    ".claude/skills/supabase-postgres-best-practices/references/security-rls-performance.md": {
+      "bytes": 2166,
+      "sha256": "b9defa5e5815a5dadf792b7c9ad7941eeaa1034082b3b06c9cd56083184022ad"
+    },
+    ".claude/skills/using-chrisbanes-skills/SKILL.md": {
+      "bytes": 3926,
+      "sha256": "6ba4ad3283898bcd5bd8930397c8c84d252356fac19a96adc7de6fe25ae944db"
+    },
+    "AGENTS.md": {
+      "bytes": 55334,
+      "sha256": "e9f85e8a51bacaa7fef235a1f41219bdb4c3383e3ce07008800c4d333174e4f4"
+    },
+    "CLAUDE.md": {
+      "bytes": 55437,
+      "sha256": "dfb319b25a4c8439771a3085ce59219e066ef0c65595cf1f728a59ccc187df32"
+    },
+    "DIEM_YEU_GOC_MAY_SELFIE.md": {
+      "bytes": 7537,
+      "sha256": "7a6873818996f3d031e51a9bbc0218a8d1bf070497b81bb4dbbe6276ae2237cd"
+    },
+    "FOOTGUNS.md": {
+      "bytes": 155160,
+      "sha256": "41505de252742819f988b620424842fddbbba3609d8087d9bf9b6a894198e94e"
+    },
+    "NGUONG_VA_GOC_QUY_CHIEU.md": {
+      "bytes": 13611,
+      "sha256": "5650fb9349411d8259c69e8b0ee88f2e622ffcdbbb5441a59b0e2953cd4a7465"
+    },
+    "TAI_LIEU_PHAN_TICH_DA_CONG_CU.md": {
+      "bytes": 19743,
+      "sha256": "b76d8ed7c4ef2cbdb0ac7a4ffeffb8f87c1d2ef8cfe319404352f44f4cbac7ca"
+    },
+    "TAI_LIEU_POSECOACH_3D_TEMPLATE_FITTER.md": {
+      "bytes": 46002,
+      "sha256": "18842d88cfcb40b2226a52def6b49dc0b165535a430e7ba27814b6dc87e28f83"
+    },
+    "THAY_DOI_NHANH_THUAT_TOAN.md": {
+      "bytes": 9541,
+      "sha256": "e419836c335532745aef8ede8611fca5b0be3b1e6306e54285009fed3c0c58ce"
+    },
+    "THU_NGHIEM_BOI_CANH.md": {
+      "bytes": 6850,
+      "sha256": "112c109675fe7e367d9579a8944cb6f9a80fcbcafb27c7d1146dc06ba67d8602"
+    },
+    "TONG_QUAN_DU_AN.md": {
+      "bytes": 67068,
+      "sha256": "bceec8eb66ae788686dc0e8acdcd26ae4faa809c904ae09df6c96b46cd0ae6d8"
+    },
+    "app/app/build.gradle.kts": {
+      "bytes": 4335,
+      "sha256": "22c2dcb05ffb73ba916c1585bdaeea04ae962ccd4adf8cabd31430caa97d9f76"
+    },
+    "app/app/src/androidTest/java/com/example/posecoach/ExampleInstrumentedTest.kt": {
+      "bytes": 669,
+      "sha256": "1a98c5a68b2c011771f330eb0617873753ee253f0457360ec98326ad75dcd6b6"
+    },
+    "app/app/src/main/AndroidManifest.xml": {
+      "bytes": 2534,
+      "sha256": "23a021a213cd7a738a127a881257083a2161628f0487a995cf331d154989ec70"
+    },
+    "app/app/src/main/assets/geocalib/geocalib-mang-int8.onnx": {
+      "bytes": 30747161,
+      "sha256": "7e63366ef8b9acbe4a2350633d415015c5f4143fc9605057d5ca4734c73a5814"
+    },
+    "app/app/src/main/assets/pose_landmarker_full.task": {
+      "bytes": 9398198,
+      "sha256": "4eaa5eb7a98365221087693fcc286334cf0858e2eb6e15b506aa4a7ecdcec4ad"
+    },
+    "app/app/src/main/assets/sample_template.png": {
+      "bytes": 691991,
+      "sha256": "3a4dceaffb7de0ec09caac81b35916e36e2c1533544557b2399e48477c4ff68d"
+    },
+    "app/app/src/main/assets/templates/README.txt": {
+      "bytes": 3635,
+      "sha256": "54a9c30ca79497c160c3ff77b63b6f0ee11eaacf4745ee499a5cb6cf1c2714e3"
+    },
+    "app/app/src/main/assets/templates/duoi-NGOI-ghe-giua-dong.jpg": {
+      "bytes": 111470,
+      "sha256": "916359436a732bbc1d7456d2b8845fcb406db5f2e9606c7d351ee8cc7a8e21e1"
+    },
+    "app/app/src/main/assets/templates/mirror-ngang-phong-thay-do.jpg": {
+      "bytes": 126559,
+      "sha256": "56421450c68e6f28d05b7549eba5cfe83512d62043738f8f0c2896a8bf31210b"
+    },
+    "app/app/src/main/assets/templates/mirror-ngang-thang-may-gucci.jpg": {
+      "bytes": 70436,
+      "sha256": "18e7eb21b83002a3c44fd4cf82da103dfd7d6c52a0d57d433133a9cbe18a1c3d"
+    },
+    "app/app/src/main/assets/templates/ngang-NGOI-goc-cay.jpg": {
+      "bytes": 120062,
+      "sha256": "216f688b2786e1f3a20a85b2146f06c957528bb5da06a23e7774b4b4a0f67e64"
+    },
+    "app/app/src/main/assets/templates/ngang-di-bo-ben-ho.jpg": {
+      "bytes": 263725,
+      "sha256": "3755039eb2a697f05e94320b9ec0e0028d52db442dd2fc57d045c5d878b77e8e"
+    },
+    "app/app/src/main/assets/templates/ngang-nam-nen-trang-tay-tui.jpg": {
+      "bytes": 63509,
+      "sha256": "07b997d156c562aa95e2c83dc312fe1a18076d3234d3e83e2147f0bc4da18e4f"
+    },
+    "app/app/src/main/assets/templates/ngang-nu-nen-trang-mu-xanh.jpg": {
+      "bytes": 51707,
+      "sha256": "c623b7074d0bf8d929cde0c8f757eba1449902e18e2c5ddac5bdc625c9f722bc"
+    },
+    "app/app/src/main/assets/templates/ngang-quay-lung-cong-vien.jpg": {
+      "bytes": 300732,
+      "sha256": "621c690b02e5be3e9b503e59d5d02c542cc86aa5d36534a7129c184de649e2c7"
+    },
+    "app/app/src/main/assets/templates/selfie-duoi-nen-troi-xanh.jpg": {
+      "bytes": 76867,
+      "sha256": "7ceeda0337dbc1dc5caf8c6dce1c4dbd8031af04b023c1b900ec08f4dd53a106"
+    },
+    "app/app/src/main/assets/templates/selfie-ngang-keo-co-ao.jpg": {
+      "bytes": 70951,
+      "sha256": "e4e322ab22a1f0cff0bebeb3346cb1d6befd7b563c2d636f98d10212185b3370"
+    },
+    "app/app/src/main/assets/templates/selfie-tren-tai-nghe-nhin-nghieng.jpg": {
+      "bytes": 50828,
+      "sha256": "a99e5e496bbb1c9fa168da2f6436d2798020be5472e2e04b3629d868bee67e40"
+    },
+    "app/app/src/main/assets/templates/tren-gan-kinh-ram-tai-nghe.jpg": {
+      "bytes": 245550,
+      "sha256": "120d4d04232bfa993f5f4b1ee8ee526ef2ce7d44e46a137bf5b415cb715db3d6"
+    },
+    "app/app/src/main/assets/templates/tren-xa-toc-hong-ben-be-boi.jpg": {
+      "bytes": 213146,
+      "sha256": "bf3a8ce81c3ed346595f33e1b0d1aaf5bccbb2afa7259d34e6ff221ad43d7486"
+    },
+    "app/app/src/main/java/com/example/posecoach/MainActivity.kt": {
+      "bytes": 8018,
+      "sha256": "3fbd73f3397121457dc52a094ba325e2b9ec7103e7d21b4b8ead2ce280cf8c6a"
+    },
+    "app/app/src/main/java/com/example/posecoach/camera/CaptureController.kt": {
+      "bytes": 29561,
+      "sha256": "02360d802af6fd21d9a803fe5f2e0d67e01e3040d1c6dac17c4511c98383e05f"
+    },
+    "app/app/src/main/java/com/example/posecoach/capture/BestShotBuffer.kt": {
+      "bytes": 9979,
+      "sha256": "c6d33c3aec985974934f503930892db117b90771fbaa0d7ad3b8956dd4be6671"
+    },
+    "app/app/src/main/java/com/example/posecoach/capture/CaptureScreen.kt": {
+      "bytes": 73161,
+      "sha256": "a15430e83869dd717f3bc01bedb4bd17c91486b131547eaf605736d871f182cc"
+    },
+    "app/app/src/main/java/com/example/posecoach/capture/CaptureUiState.kt": {
+      "bytes": 7213,
+      "sha256": "88fc4bd9c2f9e26bc0c2b3c9763c14a0802410606566e8f63e49c71745a4ea5a"
+    },
+    "app/app/src/main/java/com/example/posecoach/capture/CaptureViewModel.kt": {
+      "bytes": 20272,
+      "sha256": "910d6de17a79e5f3b8321c87549f6b54c8f8a6b7b9b04321889d4a9876578f24"
+    },
+    "app/app/src/main/java/com/example/posecoach/capture/Sharpness.kt": {
+      "bytes": 4464,
+      "sha256": "f3d88c6afc1a31ce37e29b8faa0254024fcac85a9e44fd0d4aa9b3ec85243a7c"
+    },
+    "app/app/src/main/java/com/example/posecoach/capture/ShotSession.kt": {
+      "bytes": 12504,
+      "sha256": "e84e46585e3a9d90830769c7bb973ee72268e8813fc3fff7dc1929785e1681fd"
+    },
+    "app/app/src/main/java/com/example/posecoach/capture/ShotStore.kt": {
+      "bytes": 10792,
+      "sha256": "1ddbfea7c215e74853355634afb7671befe162b5eab0b22eb240cc54a7961651"
+    },
+    "app/app/src/main/java/com/example/posecoach/capture/TiLeKhung.kt": {
+      "bytes": 1722,
+      "sha256": "a4f78526a9f9074983b34615a66b669a1426c1119678adfa8042ccd7f2f38a49"
+    },
+    "app/app/src/main/java/com/example/posecoach/core/data/LanguageRepository.kt": {
+      "bytes": 3760,
+      "sha256": "914c4286a1e48e5ce55015aac1db157f1c2172c3679f661ed4502daddd8136ae"
+    },
+    "app/app/src/main/java/com/example/posecoach/core/data/SceneRepository.kt": {
+      "bytes": 10239,
+      "sha256": "11d0573cd860ab3007fc29251ead39fa25f90e6ef9af6490fee6ea18f015558b"
+    },
+    "app/app/src/main/java/com/example/posecoach/face/FaceAnalyzer.kt": {
+      "bytes": 5176,
+      "sha256": "e37452845220bc227b112dd9fa26c66bf75dbc56cd8a84955137bb4636ff52d2"
+    },
+    "app/app/src/main/java/com/example/posecoach/geocalib/GeoCalibGocMay.kt": {
+      "bytes": 5747,
+      "sha256": "b60cd04abc7d6f96cc65c7d9fba7d2ec9482fd828d807bd89afcbbf3317a11a9"
+    },
+    "app/app/src/main/java/com/example/posecoach/geocalib/GiaiPhoiCanh.kt": {
+      "bytes": 8383,
+      "sha256": "9ca068132ed1e670541a42d0c02fb54153471065cbc6df25c0517c5ef2a926b9"
+    },
+    "app/app/src/main/java/com/example/posecoach/guidance/CameraPrep.kt": {
+      "bytes": 3155,
+      "sha256": "5df7bd48712934c89b065eeea8abffede24d28a10d637315a234dd763bade0b9"
+    },
+    "app/app/src/main/java/com/example/posecoach/guidance/CriterionGate.kt": {
+      "bytes": 10563,
+      "sha256": "2662253cadefd4019ea18abad831edf19111fedc12ec21895d2dbbc4c906fe59"
+    },
+    "app/app/src/main/java/com/example/posecoach/guidance/CuePresenter.kt": {
+      "bytes": 32274,
+      "sha256": "114f91861e3d02f8df1d3df0de41b48184d4a3664a5acb71d82eb389528f21d2"
+    },
+    "app/app/src/main/java/com/example/posecoach/guidance/DistanceEstimator.kt": {
+      "bytes": 6888,
+      "sha256": "fac1362cfb88a4c9424c9ea7ab5282ca5b40f4f9abe389c5ee66924a904c84e5"
+    },
+    "app/app/src/main/java/com/example/posecoach/guidance/GuidanceConfig.kt": {
+      "bytes": 21583,
+      "sha256": "35b075a581f7b5ecd0d265ac6eb54551b154ab0ab2f3e5020614c8ca4ebe8f1d"
+    },
+    "app/app/src/main/java/com/example/posecoach/guidance/GuidanceEngine.kt": {
+      "bytes": 39493,
+      "sha256": "4c4f886b121d5344561f3e3c4a5234fbbe0e5d13bc1773cbdb1f8fe780d77c0a"
+    },
+    "app/app/src/main/java/com/example/posecoach/guidance/PoseDescriber.kt": {
+      "bytes": 18043,
+      "sha256": "5a19b7a695a624937df26c5cd97408ac72ca142076f065c8dd5cc9abb535ca13"
+    },
+    "app/app/src/main/java/com/example/posecoach/guidance/ShootMode.kt": {
+      "bytes": 3838,
+      "sha256": "3c8b17681d4f2022096a2bdc5d42f51818a2a0f0044c50d89c432643a6944538"
+    },
+    "app/app/src/main/java/com/example/posecoach/home/HomeScreen.kt": {
+      "bytes": 35183,
+      "sha256": "bced9980cda4cefd0a47dc28e362b22c1b6825005739d9361e4cddc147afa735"
+    },
+    "app/app/src/main/java/com/example/posecoach/home/NhanDienNhap.kt": {
+      "bytes": 6348,
+      "sha256": "2e5db3e8f317adcf8bd7410c99ef7d35ba32baad8165aa3bf0c4df485d9e6ff4"
+    },
+    "app/app/src/main/java/com/example/posecoach/home/NhapAnhSheet.kt": {
+      "bytes": 17151,
+      "sha256": "197cabea7ab5d48b8fb5705bde2467d7a6652e11e4862fec639943cdeb6752de"
+    },
+    "app/app/src/main/java/com/example/posecoach/home/PhanTichAnhMau.kt": {
+      "bytes": 3721,
+      "sha256": "c62b614520440b5cd894288b4c1b27313be60d1af4579be84865831ea2165d82"
+    },
+    "app/app/src/main/java/com/example/posecoach/library/LibraryScreen.kt": {
+      "bytes": 9196,
+      "sha256": "fc5e0618ca7819651dd280303c38a2b61a8c82fa3d2f95c8a4e8ff238633cf7a"
+    },
+    "app/app/src/main/java/com/example/posecoach/measure/PoseMeasurement.kt": {
+      "bytes": 58918,
+      "sha256": "23126947d047cad13c7dc72ab52a74ba3ae8d7a5cda0100d99035ef81e0801a8"
+    },
+    "app/app/src/main/java/com/example/posecoach/measure/ShotScore.kt": {
+      "bytes": 26527,
+      "sha256": "6a8ed192866337bbe96f2594dd3c4b13f4548676fd340284eb20aa2cb5ee3c91"
+    },
+    "app/app/src/main/java/com/example/posecoach/media/MediaLibrary.kt": {
+      "bytes": 13392,
+      "sha256": "060bf8271ebff592cc2b72c9fafcb8f7a66313d3bb1687be1f69ecd59185ed6c"
+    },
+    "app/app/src/main/java/com/example/posecoach/media/ResultLibrary.kt": {
+      "bytes": 4772,
+      "sha256": "3c175d34b2ffaa1cce0bd74db7a25a4be2a42892c98b3d1ca0ae459c255b889c"
+    },
+    "app/app/src/main/java/com/example/posecoach/media/UprightBitmap.kt": {
+      "bytes": 5161,
+      "sha256": "f9bb2055f113b39e1d06caee62b820537a348054cab0bded8c5ecf87127538a9"
+    },
+    "app/app/src/main/java/com/example/posecoach/media/VideoFrameSource.kt": {
+      "bytes": 5114,
+      "sha256": "2b0d262d27ce799b00b9ff9f5988d955dbcf468a2ad0cdfc19e2dd0c26d95bbe"
+    },
+    "app/app/src/main/java/com/example/posecoach/pose/FramingClass.kt": {
+      "bytes": 7529,
+      "sha256": "cb7a18ebd68b96f71d4a00ef32d7006fa00dfbfc0f70815f54e4ca31483fed02"
+    },
+    "app/app/src/main/java/com/example/posecoach/pose/MediaPipeGuard.kt": {
+      "bytes": 1029,
+      "sha256": "65748f3ee76dca1fad71ef3222b9805e7475bb1ed8fb3afca720226c0688926e"
+    },
+    "app/app/src/main/java/com/example/posecoach/pose/PoseDetector.kt": {
+      "bytes": 10492,
+      "sha256": "3eb942c3ed9ff3413302199fbca5195a01869d9bb2a81b34eabbe4b15e2f36d1"
+    },
+    "app/app/src/main/java/com/example/posecoach/pose/PoseGeometry.kt": {
+      "bytes": 17463,
+      "sha256": "444754f961e1eb363cbd1ad58f59a276f1b5a2d408304cb21d91097b16f63827"
+    },
+    "app/app/src/main/java/com/example/posecoach/pose/StillPoseAnalyzer.kt": {
+      "bytes": 4994,
+      "sha256": "379b88ff14aa9457f2b663cf3c1b21cb24e9395fed49b3cb097be4165878ccaa"
+    },
+    "app/app/src/main/java/com/example/posecoach/pose/VideoPoseAnalyzer.kt": {
+      "bytes": 4902,
+      "sha256": "2062257291c8276a455a3c993a187aec19c04cd2ccc580dfe0adfe1b4ddb2edd"
+    },
+    "app/app/src/main/java/com/example/posecoach/result/ResultScreen.kt": {
+      "bytes": 16116,
+      "sha256": "0d97568e84e8becf9f63efe5559672a29d8d0ec56f16705577bcca42cb3a33b9"
+    },
+    "app/app/src/main/java/com/example/posecoach/result/ResultUiState.kt": {
+      "bytes": 5592,
+      "sha256": "9c45e84507b5870623d9e3221ba7015fd384b913d0ed2eb8db575dbf307e786a"
+    },
+    "app/app/src/main/java/com/example/posecoach/result/ResultViewModel.kt": {
+      "bytes": 6732,
+      "sha256": "39c2f0a6fd988d2d343da36482a8dcde127bf6cd439b95aaad8b59874c06fe39"
+    },
+    "app/app/src/main/java/com/example/posecoach/scene/SceneAction.kt": {
+      "bytes": 681,
+      "sha256": "7eecb724ec738eda25b716bc297a1048fd9f311f435427ab74321a1257636a05"
+    },
+    "app/app/src/main/java/com/example/posecoach/scene/SceneCamera.kt": {
+      "bytes": 6983,
+      "sha256": "ec5e6790369cba24a67d3a3772b83dd1c4c68abb96c94508ba524d6b12c4a1a1"
+    },
+    "app/app/src/main/java/com/example/posecoach/scene/SceneCameraScreen.kt": {
+      "bytes": 14229,
+      "sha256": "f0eb917641f82f902402e61da63ed344fbd077d5107784ef86da52da9ec6a861"
+    },
+    "app/app/src/main/java/com/example/posecoach/scene/SceneMatch.kt": {
+      "bytes": 4525,
+      "sha256": "521599dd1f44d010e74096f265ad26137d35a7f137de29ad435804613e1b0715"
+    },
+    "app/app/src/main/java/com/example/posecoach/scene/SceneScreen.kt": {
+      "bytes": 18041,
+      "sha256": "ee82a8cb3cd232d3001112e6415b08c00dad482ae9b92c4c889c8d9929adbe86"
+    },
+    "app/app/src/main/java/com/example/posecoach/scene/SceneUiState.kt": {
+      "bytes": 1503,
+      "sha256": "fd0f96da723e491d4c8d7c036650f62fb2291f36ed5eff26b53b13c6fa2ca530"
+    },
+    "app/app/src/main/java/com/example/posecoach/scene/SceneViewModel.kt": {
+      "bytes": 6525,
+      "sha256": "c4bf70c7a93fee7b3abb57d05b92a132546fb3b101f04e1e840aa0cee3c7c031"
+    },
+    "app/app/src/main/java/com/example/posecoach/scene/SceneVocabulary.kt": {
+      "bytes": 8764,
+      "sha256": "511b026f636ce9fc5a7a19cef1a93195870aeb995516d5da30b701d69348332b"
+    },
+    "app/app/src/main/java/com/example/posecoach/sensors/DeviceTilt.kt": {
+      "bytes": 5308,
+      "sha256": "1d9af8c865121830f0e023368ee05291972633b7f4657e78aaf32f87d7d9be07"
+    },
+    "app/app/src/main/java/com/example/posecoach/settings/SettingsScreen.kt": {
+      "bytes": 4524,
+      "sha256": "d547d14180094a141f9036ea139405aa43843396c37c11d003c4561b28567394"
+    },
+    "app/app/src/main/java/com/example/posecoach/template/DoanKieuTren.kt": {
+      "bytes": 2986,
+      "sha256": "d016e53a0ea0dce91051527e21e89e0e70071be8ad9c37a76d50fcc6b7501d94"
+    },
+    "app/app/src/main/java/com/example/posecoach/template/KieuChupTren.kt": {
+      "bytes": 1694,
+      "sha256": "2d4a44460a5f273080fddae546d845bce41421b4de53fed6c010965708084a54"
+    },
+    "app/app/src/main/java/com/example/posecoach/template/TemplateGate.kt": {
+      "bytes": 11247,
+      "sha256": "231571cb35753155f9d0f1def2e4e1dc9c2abf2768d294a1b9fedb42c02636cf"
+    },
+    "app/app/src/main/java/com/example/posecoach/template/TemplateProfile.kt": {
+      "bytes": 22870,
+      "sha256": "d9dec2fce91a229fda3d8990e30134be7b3ad5558b128188392cd7826dfe1bfd"
+    },
+    "app/app/src/main/java/com/example/posecoach/ui/GuidanceOverlay.kt": {
+      "bytes": 12714,
+      "sha256": "c0798eaf4dee02c5b0a70cd55bb438d5d80c08f518b56e20a52fe30970bd1289"
+    },
+    "app/app/src/main/java/com/example/posecoach/ui/UiText.kt": {
+      "bytes": 2472,
+      "sha256": "b2b94c47eec4430d5e0b66c506581c64234e2c788b2fd5549ab141f98165cd21"
+    },
+    "app/app/src/main/java/com/example/posecoach/ui/theme/Color.kt": {
+      "bytes": 285,
+      "sha256": "f1749deccf4150c1d7c4ac867f3230234c91f411dcd3e896d47ddd06b599ec7b"
+    },
+    "app/app/src/main/java/com/example/posecoach/ui/theme/DesignTokens.kt": {
+      "bytes": 3343,
+      "sha256": "0af4715a1066f48caa70601a07aa8a622b0361c8349cf2068f59c98a6d6cde82"
+    },
+    "app/app/src/main/java/com/example/posecoach/ui/theme/Theme.kt": {
+      "bytes": 1698,
+      "sha256": "6e2d536a0c3e70e9c10945370043173271a4c53f75642c88594057bf12b9fb7c"
+    },
+    "app/app/src/main/java/com/example/posecoach/ui/theme/Type.kt": {
+      "bytes": 990,
+      "sha256": "e70356af31089669c4b021e4725a776672d811d7478c9b90a5f85af8507b2833"
+    },
+    "app/app/src/main/keepRules/rules.keep": {
+      "bytes": 418,
+      "sha256": "cd9f36ade2d8604e1b7cf24eff5b171f9c0816c0aa013ba7eb55be4fe2e1dac7"
+    },
+    "app/app/src/main/res/drawable/ic_launcher_background.xml": {
+      "bytes": 5606,
+      "sha256": "ed423c73a6f40a4d2909f0901e60527b3a807cd59e1b5593bcaae1808b1c6321"
+    },
+    "app/app/src/main/res/drawable/ic_launcher_foreground.xml": {
+      "bytes": 1702,
+      "sha256": "01d1a6a6c1234eb7fe270d097eb283d72b9c95ae5118886f1b6573aad280f1f7"
+    },
+    "app/app/src/main/res/mipmap-anydpi/ic_launcher.xml": {
+      "bytes": 343,
+      "sha256": "88f7653499ef524126ea5018a99baf9cc3269e7e584d6205dfdd76db39f39cc0"
+    },
+    "app/app/src/main/res/mipmap-anydpi/ic_launcher_round.xml": {
+      "bytes": 343,
+      "sha256": "88f7653499ef524126ea5018a99baf9cc3269e7e584d6205dfdd76db39f39cc0"
+    },
+    "app/app/src/main/res/mipmap-hdpi/ic_launcher.webp": {
+      "bytes": 1404,
+      "sha256": "dd00996198640ed28fbc09cdcd7a3807cf8707f3eb255b659634da3ca6a6ff01"
+    },
+    "app/app/src/main/res/mipmap-hdpi/ic_launcher_round.webp": {
+      "bytes": 2898,
+      "sha256": "1ed73f5341a69d3b41c7e02e126803f50cc8c3284adf4bbb737f0c93577aef07"
+    },
+    "app/app/src/main/res/mipmap-mdpi/ic_launcher.webp": {
+      "bytes": 982,
+      "sha256": "846219e6f72fe9a6c104ca8919cbee36a101e7d2ff8da9da67b689a5888f060d"
+    },
+    "app/app/src/main/res/mipmap-mdpi/ic_launcher_round.webp": {
+      "bytes": 1772,
+      "sha256": "4e2c58b91de01130e6479e00cbbaaf6e77cd961dd2c8e303cf13cd077fa92632"
+    },
+    "app/app/src/main/res/mipmap-xhdpi/ic_launcher.webp": {
+      "bytes": 1900,
+      "sha256": "398340dad816fc9a6338cb151a8cf1e45b926f9bfb70628b24c4bd2523cc94d4"
+    },
+    "app/app/src/main/res/mipmap-xhdpi/ic_launcher_round.webp": {
+      "bytes": 3918,
+      "sha256": "91b490aef86574901137f0a252272e1f1add99c1ad709e0696ed68929b88d261"
+    },
+    "app/app/src/main/res/mipmap-xxhdpi/ic_launcher.webp": {
+      "bytes": 2884,
+      "sha256": "58ae87fa0c5b5d1562d27fd648d2c061553fe20e3ed570bde588162d01ea7a27"
+    },
+    "app/app/src/main/res/mipmap-xxhdpi/ic_launcher_round.webp": {
+      "bytes": 5914,
+      "sha256": "3009fad079f5772f30ecd767f98924367fbe0f81c30048d672d4fda2d5ca7d12"
+    },
+    "app/app/src/main/res/mipmap-xxxhdpi/ic_launcher.webp": {
+      "bytes": 3844,
+      "sha256": "f98fef5bc3bfe5b65692c40ad1cbae2bec4faf9f1b249c397626740db71b62d8"
+    },
+    "app/app/src/main/res/mipmap-xxxhdpi/ic_launcher_round.webp": {
+      "bytes": 7778,
+      "sha256": "5faf033745c8c882c43bb1b372d4e4a5890caec63d9892a2e756c954108b85dc"
+    },
+    "app/app/src/main/res/values-vi/strings.xml": {
+      "bytes": 38824,
+      "sha256": "56623d66b9cc54ee9cedd8bbe46995b3329a078c869e182def9db0d231b61ef8"
+    },
+    "app/app/src/main/res/values/colors.xml": {
+      "bytes": 378,
+      "sha256": "b5626527d503417f0d8e5b1e08f338de7b31173bf0e122815f03e64932adbd88"
+    },
+    "app/app/src/main/res/values/strings.xml": {
+      "bytes": 37096,
+      "sha256": "cb8e81f32064f90806716866d307a1ffdc0756468de9d1a4f68fbcf006a45111"
+    },
+    "app/app/src/main/res/values/themes.xml": {
+      "bytes": 151,
+      "sha256": "520bcdcde8ccd13d108373ce0d40a005ec7708e7390c41372af021fd4e01fd9b"
+    },
+    "app/app/src/main/res/xml/backup_rules.xml": {
+      "bytes": 478,
+      "sha256": "6cf1a27e6807b1d24e41d3fbe7ddc1bfe1f42226027964f6eaf477d71b43b283"
+    },
+    "app/app/src/main/res/xml/data_extraction_rules.xml": {
+      "bytes": 551,
+      "sha256": "cb1fc47ab4a984530ed60e0e6ee638929c3038290e7e7e0b4b03a3a30fbe7381"
+    },
+    "app/app/src/main/res/xml/locales_config.xml": {
+      "bytes": 536,
+      "sha256": "1e3aea4f663756aa22221ecc5cab9f1005b3e6d6107cad271324a057dfcd5b16"
+    },
+    "app/app/src/main/res/xml/scene_file_paths.xml": {
+      "bytes": 193,
+      "sha256": "eebec8c72d2e163a47823f5e3af95f46898d2223ca266af158f12effcde84d0f"
+    },
+    "app/app/src/test/java/com/example/posecoach/AnhNhapTest.kt": {
+      "bytes": 3725,
+      "sha256": "c2dd86330d563231e1e5784fbb9c139d49cf19fbbff932703e1aedbddce365ae"
+    },
+    "app/app/src/test/java/com/example/posecoach/AppLanguageTest.kt": {
+      "bytes": 840,
+      "sha256": "b330263929080afaf24d77a09defb295e4cc19fdfa6729bdebd4cf5a9114c8a3"
+    },
+    "app/app/src/test/java/com/example/posecoach/AspectCropTest.kt": {
+      "bytes": 4849,
+      "sha256": "f1cc229840412664731c77f86e2735ca01d263241721ccfd217f40409a6f7d2f"
+    },
+    "app/app/src/test/java/com/example/posecoach/AutoCountdownTest.kt": {
+      "bytes": 4066,
+      "sha256": "e1f9d1f41a4ed11214b9d2c6d600a5c58a0cf817a06012cc4bb8b491c1ea88fe"
+    },
+    "app/app/src/test/java/com/example/posecoach/BestShotBufferTest.kt": {
+      "bytes": 7918,
+      "sha256": "1d456e528396ffb4404dab7503a92d01ac45d3ebf33ad72c23ffc5d30d3eaf52"
+    },
+    "app/app/src/test/java/com/example/posecoach/CongKiemVaHuongMayTest.kt": {
+      "bytes": 7945,
+      "sha256": "9f36a65cf45e86d0b639066135e588aac874240ee06f1eb4ed09bf121ac7e751"
+    },
+    "app/app/src/test/java/com/example/posecoach/CriterionGateTest.kt": {
+      "bytes": 7774,
+      "sha256": "10ef75b0f19911a9b20e682eb11fa315924cd77f9b9d1a72ab1e5001d704d078"
+    },
+    "app/app/src/test/java/com/example/posecoach/CuePresenterTest.kt": {
+      "bytes": 11931,
+      "sha256": "ab8912259662fdbbd22ba7427e89662c8f46389af30bde8521b9aaf2c528852b"
+    },
+    "app/app/src/test/java/com/example/posecoach/DoanKieuTrenTest.kt": {
+      "bytes": 1941,
+      "sha256": "1af4ab500bf619fb83114c03dfc189dc5defc8d3da0022ef7dd539a0c70ab357"
+    },
+    "app/app/src/test/java/com/example/posecoach/ExampleUnitTest.kt": {
+      "bytes": 345,
+      "sha256": "878b8c1fef8c4e2f4bb58296df9672e159f4311235066cb55a677dd08c9b273a"
+    },
+    "app/app/src/test/java/com/example/posecoach/FailedCriteriaTest.kt": {
+      "bytes": 3589,
+      "sha256": "5495f23f1dc870ee0b560acf2e7071ffd59c080c5bd0ac0f3714705d6224eb34"
+    },
+    "app/app/src/test/java/com/example/posecoach/GiaiPhoiCanhTest.kt": {
+      "bytes": 1789,
+      "sha256": "4692bdfc8b6a2b77074a1b34b8af7a6cb1e4ea2ef7f41f3857959ea6b3b0fb33"
+    },
+    "app/app/src/test/java/com/example/posecoach/GocMayTest.kt": {
+      "bytes": 14740,
+      "sha256": "92fbb5071b1933a147f69ea195b6063f31cc41865d4e8dffedc4062c33d16521"
+    },
+    "app/app/src/test/java/com/example/posecoach/HieuChinhGocAnhTest.kt": {
+      "bytes": 1512,
+      "sha256": "251c401f5751542fad5753b201e400b6414c6efeda9819eceb6a0fa55c41495c"
+    },
+    "app/app/src/test/java/com/example/posecoach/HuongDanTuanTuTest.kt": {
+      "bytes": 2222,
+      "sha256": "24490d538654892ca14b0e6ae47a0664e76b1fb2f11e12d7055e5af3b7a293c8"
+    },
+    "app/app/src/test/java/com/example/posecoach/KieuChupTrenTest.kt": {
+      "bytes": 7609,
+      "sha256": "c37e11bf65c53e8c395ca8ec05f8353777fbf0bb24b3efbbc22e73742d156107"
+    },
+    "app/app/src/test/java/com/example/posecoach/LimbTowardLensTest.kt": {
+      "bytes": 15250,
+      "sha256": "21dca3aa80500ad5e76f1b741b4ad41ceb751f2918bfb50b4bcb43516941a85a"
+    },
+    "app/app/src/test/java/com/example/posecoach/LocaleCsvTest.kt": {
+      "bytes": 2223,
+      "sha256": "f3f24b700d43c56a31b812dbaf319c605eea5fb904b53a6f650ef79b7c12aea0"
+    },
+    "app/app/src/test/java/com/example/posecoach/MatchPercentTest.kt": {
+      "bytes": 7120,
+      "sha256": "4d49d34bdac2d89187d587e4c9ba8a626a060c110dfa9926bf5214c78bbf7e23"
+    },
+    "app/app/src/test/java/com/example/posecoach/MirrorSelfieTest.kt": {
+      "bytes": 13820,
+      "sha256": "6f4e597d11162ddabc73387fbc02abaeb29840899739906c09e5e03a12869ce4"
+    },
+    "app/app/src/test/java/com/example/posecoach/PerspectiveTest.kt": {
+      "bytes": 6467,
+      "sha256": "4ceda6fdacdb598e717cfe5525dbdbf412d861c67878dbb81c09ecdaa257f955"
+    },
+    "app/app/src/test/java/com/example/posecoach/PerspectiveValueTest.kt": {
+      "bytes": 7688,
+      "sha256": "d2f16b4749d037e2f77426447983c5ffdf73927f1c8c7fdf5f40ef7555a684bd"
+    },
+    "app/app/src/test/java/com/example/posecoach/RollCriterionTest.kt": {
+      "bytes": 10840,
+      "sha256": "3431f0b6f63ed68d0d76885f3434e7dc0211088eaa4412a739253562f6e16e2d"
+    },
+    "app/app/src/test/java/com/example/posecoach/SceneMatchingTest.kt": {
+      "bytes": 2385,
+      "sha256": "3ffdb51d180bdfbc09b490b4be75d95a68c58972c0aa2278f1bac7db6d796508"
+    },
+    "app/app/src/test/java/com/example/posecoach/SceneVocabularyTest.kt": {
+      "bytes": 3875,
+      "sha256": "9d328e7e02a6e33f1ebecca14908c5bfc51eee86824a83d98aa9973327ecf96e"
+    },
+    "app/app/src/test/java/com/example/posecoach/ShotScorerTest.kt": {
+      "bytes": 17728,
+      "sha256": "b172363e0f0df3691c9efb8c40aa312ec18d444412785269181ae5cf59cb2369"
+    },
+    "app/app/src/test/java/com/example/posecoach/SilentDeadlockTest.kt": {
+      "bytes": 7071,
+      "sha256": "bb4a464fa64f74e01a3a047e6daf9cfe990698f5ea5388cee1838da5e0abe946"
+    },
+    "app/app/src/test/java/com/example/posecoach/StringsParityTest.kt": {
+      "bytes": 2539,
+      "sha256": "55115f5762c35d2abc58f6c8eadb001004e1c2e3bd4677d1ad1244ebb94e046b"
+    },
+    "app/app/src/test/java/com/example/posecoach/TestStrings.kt": {
+      "bytes": 3740,
+      "sha256": "9f6ca871c438e867adf66418d97ee7ca16470e944dae604b4af8c1f8d8b25861"
+    },
+    "app/app/src/test/java/com/example/posecoach/ThoiQuenChupTest.kt": {
+      "bytes": 8871,
+      "sha256": "1c41e1fb3464d246bd68597ca70b80d314911e5405f4e1df0eb31e0bc47ca38f"
+    },
+    "app/app/src/test/java/com/example/posecoach/TiLeKhungTest.kt": {
+      "bytes": 1940,
+      "sha256": "8a0d4fde4ae5895ee0f3b05f84428e4d7d89165591be3cd13f445d3ff2b3af59"
+    },
+    "app/app/src/test/java/com/example/posecoach/VideoTest1309Test.kt": {
+      "bytes": 10998,
+      "sha256": "daadfee0be67f899e9cd55c925dbed26845d7421e5620fa3c6556d4c6e0a8155"
+    },
+    "app/app/src/test/java/com/example/posecoach/VideoTest1909Test.kt": {
+      "bytes": 1856,
+      "sha256": "09ac3404843906f9e29c0034b800dd5ae6f1d279ae8dd7de84e4bf2dc57d3367"
+    },
+    "app/build.gradle.kts": {
+      "bytes": 218,
+      "sha256": "be7dbfa1841b18b020f744e203b995d3dac5709c2a6b8e310fbcfaed0364919a"
+    },
+    "app/gradle.properties": {
+      "bytes": 1661,
+      "sha256": "431f6007d1486ac11e7c72bbaf7dd3899f212305138fee77e48238f340876b78"
+    },
+    "app/gradle/libs.versions.toml": {
+      "bytes": 4691,
+      "sha256": "47f05fc2fbcc52bab52d9a34a7470b8d126db3a2529abaefb54c3bf495fc96f4"
+    },
+    "app/gradle/wrapper/gradle-wrapper.properties": {
+      "bytes": 384,
+      "sha256": "b1b5f65f9a0ef7ae6d6d259afe90a9eda8036ff8a18279958039ec376314d6a6"
+    },
+    "app/settings.gradle.kts": {
+      "bytes": 620,
+      "sha256": "2dfa21b62d20fab5f68b959200844478f32104b18e80674c126578760f9663b2"
+    },
+    "tai-lieu-goc/DOC-NAY-TRUOC.md": {
+      "bytes": 1217,
+      "sha256": "69ab3d4644758429ee2ceb112b3b039cb59a55cc724a53b8737b7d41e03b160c"
+    },
+    "toolkit/01-research-and-prd/README.md": {
+      "bytes": 805,
+      "sha256": "9ad7042297478e44d501b48cc801b5cced471776da955e5a5b3dc210b605a5f5"
+    },
+    "toolkit/02-ui-design/README.md": {
+      "bytes": 1099,
+      "sha256": "daa79240caff62502534aec13fdc90ff65639282dbb75d0ae009104432278457"
+    },
+    "toolkit/03-dev-code/BOOTSTRAP.md": {
+      "bytes": 8210,
+      "sha256": "e6afcd8dec4616554421f4467cb9c513cd103eb1d1cdac53bbdf8715b35ff5e4"
+    },
+    "toolkit/03-dev-code/SETUP.md": {
+      "bytes": 4549,
+      "sha256": "61a90bebd142a88257cabbe25e9b8844a50a205b1befcf5b2bc64eeb7d4825a3"
+    },
+    "toolkit/03-dev-code/SKILL/_shared/code-review-expert/README.md": {
+      "bytes": 2433,
+      "sha256": "a244ed1919875982e8f2508b3a45ce748282c91623574c974aae0d10a5ae58a0"
+    },
+    "toolkit/03-dev-code/SKILL/_shared/code-review-expert/SKILL.md": {
+      "bytes": 5544,
+      "sha256": "6fd03c8a0e6b2eec3c4b7ab5000bcb1ac2daa1202c018e70d19d33592db8482e"
+    },
+    "toolkit/03-dev-code/SKILL/_shared/code-review-expert/references/code-quality-checklist.md": {
+      "bytes": 4762,
+      "sha256": "331fe66d5f3849a018be43a64d46173371fe0dd680ca73b2050d4bf860d46e1d"
+    },
+    "toolkit/03-dev-code/SKILL/_shared/code-review-expert/references/removal-plan.md": {
+      "bytes": 1724,
+      "sha256": "b71008bd9b585ee660f76e55630e8224926d9cb711caaf8d4b7f09d885a1aa0f"
+    },
+    "toolkit/03-dev-code/SKILL/_shared/code-review-expert/references/security-checklist.md": {
+      "bytes": 4538,
+      "sha256": "4b9a19355fab47d93079cf52fcab18dcae94dbec594ef9a151ef975b239ad05c"
+    },
+    "toolkit/03-dev-code/SKILL/_shared/code-review-expert/references/solid-checklist.md": {
+      "bytes": 2809,
+      "sha256": "ef153bd9a2a093b43da4769d4e441c91113938bf18d2feb4b388eb554dc19096"
+    },
+    "toolkit/03-dev-code/SKILL/_shared/supabase-postgres-best-practices/CHANGELOG.md": {
+      "bytes": 5757,
+      "sha256": "849d982843672c2c7796cf3488b20c29538cdd304c1d64a60aec2500138059e9"
+    },
+    "toolkit/03-dev-code/SKILL/_shared/supabase-postgres-best-practices/SKILL.md": {
+      "bytes": 3295,
+      "sha256": "4d7d1bd60f2ad7fd0d510269279519059dcc630d832f4c241d90735244c70525"
+    },
+    "toolkit/03-dev-code/SKILL/_shared/supabase-postgres-best-practices/references/_contributing.md": {
+      "bytes": 4283,
+      "sha256": "b851de03355ea919862b637fdc14fefab648149cf1013b0194a17108b2d8af4c"
+    },
+    "toolkit/03-dev-code/SKILL/_shared/supabase-postgres-best-practices/references/_sections.md": {
+      "bytes": 1721,
+      "sha256": "ad2d6f6b0938ff844f7f8971153ab6d08a03ef6511b02fb9cee9336c7b209e93"
+    },
+    "toolkit/03-dev-code/SKILL/_shared/supabase-postgres-best-practices/references/_template.md": {
+      "bytes": 1074,
+      "sha256": "39e9fce3c6ae1af110f689e018d4417f3547ed0417a7b6198b207285e60bf9b8"
+    },
+    "toolkit/03-dev-code/SKILL/_shared/supabase-postgres-best-practices/references/advanced-full-text-search.md": {
+      "bytes": 1523,
+      "sha256": "0682b713263c5b6b9638a31f810bad07aa179bc4f79bbb787b92ed287e00fe76"
+    },
+    "toolkit/03-dev-code/SKILL/_shared/supabase-postgres-best-practices/references/advanced-jsonb-indexing.md": {
+      "bytes": 1493,
+      "sha256": "9bcbf7da33f6fe6fa9525680ca26d4e3412b534104cffb5f8529596d76631e4f"
+    },
+    "toolkit/03-dev-code/SKILL/_shared/supabase-postgres-best-practices/references/conn-idle-timeout.md": {
+      "bytes": 1328,
+      "sha256": "cd4386d0b5a2bd6d0148975f0f379016b47c7cf139b9483c4f24619c6a89f5e3"
+    },
+    "toolkit/03-dev-code/SKILL/_shared/supabase-postgres-best-practices/references/conn-limits.md": {
+      "bytes": 1369,
+      "sha256": "9ed6e5e3a45458a52f2863a60324a05d80da1d9f3e23bcb83b06f464f6a3cee7"
+    },
+    "toolkit/03-dev-code/SKILL/_shared/supabase-postgres-best-practices/references/conn-pooling.md": {
+      "bytes": 1423,
+      "sha256": "60cd5f7942c44bdf6d8622a49a2e9f0f7fd01daf8e62bd1bd66b195cd6942975"
+    },
+    "toolkit/03-dev-code/SKILL/_shared/supabase-postgres-best-practices/references/conn-prepared-statements.md": {
+      "bytes": 1575,
+      "sha256": "5ce48ff1e426c9b90c75c5733817fc2dd8feea9e4db3298ec9373b9cd0cf3bf8"
+    },
+    "toolkit/03-dev-code/SKILL/_shared/supabase-postgres-best-practices/references/data-batch-inserts.md": {
+      "bytes": 1341,
+      "sha256": "98251b608bb6cfefd28828c9e5fffc705a155f1212fa0cb82904c5bc2e417572"
+    },
+    "toolkit/03-dev-code/SKILL/_shared/supabase-postgres-best-practices/references/data-n-plus-one.md": {
+      "bytes": 1414,
+      "sha256": "f5c60f85f208161cd7567bb7cff0f559618814216a4426bb1351b51f75ec334d"
+    },
+    "toolkit/03-dev-code/SKILL/_shared/supabase-postgres-best-practices/references/data-pagination.md": {
+      "bytes": 1408,
+      "sha256": "c0bffeb6880c1f5b961e7c2ff36fd16686ebb09e5e49ed17499654beabea3e60"
+    },
+    "toolkit/03-dev-code/SKILL/_shared/supabase-postgres-best-practices/references/data-upsert.md": {
+      "bytes": 1440,
+      "sha256": "b366aa7da1e7929fba3011f99d949b2593967920d0c3c8572e07c0407c367054"
+    },
+    "toolkit/03-dev-code/SKILL/_shared/supabase-postgres-best-practices/references/lock-advisory.md": {
+      "bytes": 1587,
+      "sha256": "6d6b50c5ec9f85eb7aebbb1466e642e427c1732efa558488a9cae7ef9903febd"
+    },
+    "toolkit/03-dev-code/SKILL/_shared/supabase-postgres-best-practices/references/lock-deadlock-prevention.md": {
+      "bytes": 1923,
+      "sha256": "55f2074581d4db4996fc3ea1d3c120295209a70115f773e2c54f6b312405b293"
+    },
+    "toolkit/03-dev-code/SKILL/_shared/supabase-postgres-best-practices/references/lock-short-transactions.md": {
+      "bytes": 1400,
+      "sha256": "2538a22231c0dfde9967812b6bd5fb347287b671f72806495f89d0d0764e5fe6"
+    },
+    "toolkit/03-dev-code/SKILL/_shared/supabase-postgres-best-practices/references/lock-skip-locked.md": {
+      "bytes": 1407,
+      "sha256": "42c7492ba7f5d2c8ede9a5af072ea63deacf71e5695e022cae15b46b1ce4df13"
+    },
+    "toolkit/03-dev-code/SKILL/_shared/supabase-postgres-best-practices/references/monitor-explain-analyze.md": {
+      "bytes": 1486,
+      "sha256": "94881b47194cb164b1d2a004e79f181370af44ec830b9263e990e2710bd02b76"
+    },
+    "toolkit/03-dev-code/SKILL/_shared/supabase-postgres-best-practices/references/monitor-pg-stat-statements.md": {
+      "bytes": 1473,
+      "sha256": "812bf181876bacac5a2f914e7ffcf2a0a215b6d18dda752e65e75d926cbbcef4"
+    },
+    "toolkit/03-dev-code/SKILL/_shared/supabase-postgres-best-practices/references/monitor-vacuum-analyze.md": {
+      "bytes": 1561,
+      "sha256": "8d35221e676f13b122865d5df947a008c41367bd180010e52fde3c429e8552a9"
+    },
+    "toolkit/03-dev-code/SKILL/_shared/supabase-postgres-best-practices/references/query-composite-indexes.md": {
+      "bytes": 1498,
+      "sha256": "7e75d1b4d4431cb874ecc28710e95b7d2d7364511daa5d2c8e9d7de7ce1d0054"
+    },
+    "toolkit/03-dev-code/SKILL/_shared/supabase-postgres-best-practices/references/query-covering-indexes.md": {
+      "bytes": 1327,
+      "sha256": "028770393de8c0be6dcc7b9fb017f8209761d1854ebf433f036367e602f2d04d"
+    },
+    "toolkit/03-dev-code/SKILL/_shared/supabase-postgres-best-practices/references/query-index-types.md": {
+      "bytes": 1569,
+      "sha256": "5f054ce4f835091bb5ff89875deb5f8ade9e447e2ea62d1ca07382d104af0f2d"
+    },
+    "toolkit/03-dev-code/SKILL/_shared/supabase-postgres-best-practices/references/query-missing-indexes.md": {
+      "bytes": 1261,
+      "sha256": "15ddf120c86020612d2713225c850e0e4f022b38021f40f45e5bbe58f245dcc3"
+    },
+    "toolkit/03-dev-code/SKILL/_shared/supabase-postgres-best-practices/references/query-partial-indexes.md": {
+      "bytes": 1392,
+      "sha256": "106e2b88ff64115efa0a6b5f448d31788681493eeec05ad373f7c2ce6c8e0381"
+    },
+    "toolkit/03-dev-code/SKILL/_shared/supabase-postgres-best-practices/references/schema-constraints.md": {
+      "bytes": 1960,
+      "sha256": "d6e16d565c9832b70f8b1d472f7dc86dafa1351a44e8da72c88b48d337f73d7f"
+    },
+    "toolkit/03-dev-code/SKILL/_shared/supabase-postgres-best-practices/references/schema-data-types.md": {
+      "bytes": 1499,
+      "sha256": "df3197b3393f37b065396c2d3d2035d870d5d572ceaf6562e7c85559dcd11871"
+    },
+    "toolkit/03-dev-code/SKILL/_shared/supabase-postgres-best-practices/references/schema-foreign-key-indexes.md": {
+      "bytes": 1738,
+      "sha256": "b49a4e74ded6dd2a2bcf82d21fd22470c403b54cc526dc387f95c001c005c5d2"
+    },
+    "toolkit/03-dev-code/SKILL/_shared/supabase-postgres-best-practices/references/schema-lowercase-identifiers.md": {
+      "bytes": 1783,
+      "sha256": "e7e3e073df2fd787cc4e58dbfe1b7eb1f80439326042c5e73a69ae8a3b1dd734"
+    },
+    "toolkit/03-dev-code/SKILL/_shared/supabase-postgres-best-practices/references/schema-partitioning.md": {
+      "bytes": 1603,
+      "sha256": "d940ee09551e970f97c629e816502989c37f7dcea1df94b4b52f79f6eefc9971"
+    },
+    "toolkit/03-dev-code/SKILL/_shared/supabase-postgres-best-practices/references/schema-primary-keys.md": {
+      "bytes": 1882,
+      "sha256": "8e4350d0c4b0034fa843ef74716978729329543ff57fe9fad1d22e31a86ae0c5"
+    },
+    "toolkit/03-dev-code/SKILL/_shared/supabase-postgres-best-practices/references/security-privileges.md": {
+      "bytes": 1620,
+      "sha256": "079b20aba6ce8dbea81678fafdd95b4f9785440e91d07eb96029104597cb9693"
+    },
+    "toolkit/03-dev-code/SKILL/_shared/supabase-postgres-best-practices/references/security-rls-basics.md": {
+      "bytes": 1422,
+      "sha256": "e1b419ae752d06f6180a0dd61fa21cfdc2b19e34902495bd2827d3e6e350dfe3"
+    },
+    "toolkit/03-dev-code/SKILL/_shared/supabase-postgres-best-practices/references/security-rls-performance.md": {
+      "bytes": 2166,
+      "sha256": "b9defa5e5815a5dadf792b7c9ad7941eeaa1034082b3b06c9cd56083184022ad"
+    },
+    "toolkit/03-dev-code/SKILL/android-native/android-native-dev/SKILL.md": {
+      "bytes": 28621,
+      "sha256": "043129d00d8fd400fa2ff6a2126471fcf01e83d57ce5749c4c75eb4009e9e909"
+    },
+    "toolkit/03-dev-code/SKILL/android-native/android-native-dev/references/accessibility.md": {
+      "bytes": 5732,
+      "sha256": "80f6f5950883c9ddbfe14facdc7690ef58141acaf9796d19a8f60a7600a1c792"
+    },
+    "toolkit/03-dev-code/SKILL/android-native/android-native-dev/references/adaptive-screens.md": {
+      "bytes": 6098,
+      "sha256": "509b0a9fb7c264675b2d78b3505d779bd1a68516ccd51146c8dfcbb50f4c0968"
+    },
+    "toolkit/03-dev-code/SKILL/android-native/android-native-dev/references/design-style-guide.md": {
+      "bytes": 10126,
+      "sha256": "bc7cdf92ddb8d745538603f3701de634b3793369d503728ddce7457f60ee37c3"
+    },
+    "toolkit/03-dev-code/SKILL/android-native/android-native-dev/references/functional-requirements.md": {
+      "bytes": 6175,
+      "sha256": "732b91d2b7091914358ed8eb752d7203fef302188c104d29bfade32df5659643"
+    },
+    "toolkit/03-dev-code/SKILL/android-native/android-native-dev/references/motion-system.md": {
+      "bytes": 5443,
+      "sha256": "781edd94ae6d107719adbd9ae199d358f545fa00a052fd8015842477c4d717bb"
+    },
+    "toolkit/03-dev-code/SKILL/android-native/android-native-dev/references/performance-stability.md": {
+      "bytes": 6334,
+      "sha256": "ac3fc3776add17cfb0f40ee57029736c480f70e2672b4bbfcdd8c3896fe2c422"
+    },
+    "toolkit/03-dev-code/SKILL/android-native/android-native-dev/references/privacy-security.md": {
+      "bytes": 6667,
+      "sha256": "324d84c3d6c955854cc6095f4c6a86cd4b43fe7d28980f5d453105c625ab8063"
+    },
+    "toolkit/03-dev-code/SKILL/android-native/android-native-dev/references/testing.md": {
+      "bytes": 17568,
+      "sha256": "a6d2cead93bc43b22e64fe5208d284fd8931474d0c6d48664f1cd009a7b43baa"
+    },
+    "toolkit/03-dev-code/SKILL/android-native/android-native-dev/references/visual-design.md": {
+      "bytes": 7523,
+      "sha256": "39d30ddf2e11c1659b1fd3515cdb3d1fa41ab31268cc615456ce62f407ae3a9f"
+    },
+    "toolkit/03-dev-code/SKILL/android-native/compose-animations/SKILL.md": {
+      "bytes": 3942,
+      "sha256": "a10961d3251f680a57c4481b75ea0111ea78dcb373aac6b308ee55f9d2a7676d"
+    },
+    "toolkit/03-dev-code/SKILL/android-native/compose-animations/references/animated-content.md": {
+      "bytes": 1523,
+      "sha256": "5e2886bd7f1c0e8884fe60d38ac04e0c23b45f5693026da38cfaf5e1cc31b1df"
+    },
+    "toolkit/03-dev-code/SKILL/android-native/compose-component-design/SKILL.md": {
+      "bytes": 2497,
+      "sha256": "caddd421c755aba30472e08892b0989f7ab9094b85043e2d498a5dbbcfa4e2b0"
+    },
+    "toolkit/03-dev-code/SKILL/android-native/compose-component-design/references/modifier-layout.md": {
+      "bytes": 2827,
+      "sha256": "94dea06dbfbff57276da0f7eb0e445b60616049c03ecef591c7f2b26ee52afc0"
+    },
+    "toolkit/03-dev-code/SKILL/android-native/compose-component-design/references/slot-apis.md": {
+      "bytes": 2461,
+      "sha256": "08fd24b6bee03879aaa71f69ebf504e6a0990ff761795a6f1ac99379c8ef79ad"
+    },
+    "toolkit/03-dev-code/SKILL/android-native/compose-focus-navigation/SKILL.md": {
+      "bytes": 3772,
+      "sha256": "b2626ba9299da86f437e98ce0554963f0f393ee7ce71f255846e11c56c1a9134"
+    },
+    "toolkit/03-dev-code/SKILL/android-native/compose-performance/SKILL.md": {
+      "bytes": 2511,
+      "sha256": "3d046ede84ad9574fa9160d719f977d83c5b7666da0952af8fd8a07087925a12"
+    },
+    "toolkit/03-dev-code/SKILL/android-native/compose-performance/references/composition-contracts.md": {
+      "bytes": 1166,
+      "sha256": "73362e6ac08547141128de67f98a068e3904b8afd29e858ff273ecffebbcf719"
+    },
+    "toolkit/03-dev-code/SKILL/android-native/compose-performance/references/deferred-reads.md": {
+      "bytes": 2725,
+      "sha256": "c57117e3e95c9a9b72d64c54e9d084cb4eb5bf22ec29792fd7332f2352e44644"
+    },
+    "toolkit/03-dev-code/SKILL/android-native/compose-performance/references/diagnosis.md": {
+      "bytes": 2800,
+      "sha256": "f355f396e602dddb8d8821e7162e2dadd59fe58cbb48ca5e4ef211155fb526c8"
+    },
+    "toolkit/03-dev-code/SKILL/android-native/compose-performance/references/stability.md": {
+      "bytes": 2833,
+      "sha256": "f2654851d8c1ee81892e45cec26c81eba8bdd5cf73568e028a9a556603a59555"
+    },
+    "toolkit/03-dev-code/SKILL/android-native/compose-state-and-effects/SKILL.md": {
+      "bytes": 3317,
+      "sha256": "5e6df6c17ea43623d975d1172c69a467cfb549021e12971817073fd81dcca70f"
+    },
+    "toolkit/03-dev-code/SKILL/android-native/compose-state-and-effects/references/local-state.md": {
+      "bytes": 1854,
+      "sha256": "c06198d5cd5e9619ee0fc9edbd56c20d99994ed627a8d98cea2aba2e16319377"
+    },
+    "toolkit/03-dev-code/SKILL/android-native/compose-state-and-effects/references/side-effects.md": {
+      "bytes": 2692,
+      "sha256": "bb031647c0cd17d503079651afae4e7cfe8ba4a96a98141d5be4733351ccc38c"
+    },
+    "toolkit/03-dev-code/SKILL/android-native/compose-state-and-effects/references/state-hoisting.md": {
+      "bytes": 2984,
+      "sha256": "2c6a77a74ccc654a8e461e593ceb117749b1ed68a7635e62a54735afc2534951"
+    },
+    "toolkit/03-dev-code/SKILL/android-native/compose-ui-testing-patterns/SKILL.md": {
+      "bytes": 7656,
+      "sha256": "87bc868dcc106326a3afb01e19151f90d8b1cd218a7c49e7400e13d43e2384ba"
+    },
+    "toolkit/03-dev-code/SKILL/android-native/gradle-run/SKILL.md": {
+      "bytes": 4675,
+      "sha256": "2a7cf41ef89cc1c11b9bff104c340b4b127ad6757e7d55c80ae7058bf896ad0c"
+    },
+    "toolkit/03-dev-code/SKILL/android-native/kotlin-api-design/SKILL.md": {
+      "bytes": 2117,
+      "sha256": "49bc11f02cdcba2c55ae7b02ec70450e18a532113f716de7f812db2a20bc50df"
+    },
+    "toolkit/03-dev-code/SKILL/android-native/kotlin-api-design/references/functions.md": {
+      "bytes": 2611,
+      "sha256": "6bff9c0e54d576d8c42b426bb8ef33b1be37da0846262c9db0ad36565baf81ed"
+    },
+    "toolkit/03-dev-code/SKILL/android-native/kotlin-api-design/references/multiplatform-boundaries.md": {
+      "bytes": 4359,
+      "sha256": "6d11700892f66a4e36878c4fa9f064baf1151bc6da756967a44c0a54c18bd746"
+    },
+    "toolkit/03-dev-code/SKILL/android-native/kotlin-api-design/references/value-classes.md": {
+      "bytes": 4019,
+      "sha256": "e2c16078c78004f11b5acf6c41eafd27db3bf23e629827810877087b1b1051fe"
+    },
+    "toolkit/03-dev-code/SKILL/android-native/kotlin-concurrency-and-flow/SKILL.md": {
+      "bytes": 2412,
+      "sha256": "1f85854f681860ed37e92089341439a9ec4aa8d54cc62e0163dd00a9f29d4703"
+    },
+    "toolkit/03-dev-code/SKILL/android-native/kotlin-concurrency-and-flow/references/flow-state-events.md": {
+      "bytes": 2883,
+      "sha256": "dcbbe576d065061049504c94145cd3250e33b54e1ff49143fcd23d8329e43278"
+    },
+    "toolkit/03-dev-code/SKILL/android-native/kotlin-concurrency-and-flow/references/structured-concurrency.md": {
+      "bytes": 5218,
+      "sha256": "c6726b464150d21164986f1c08fdfc0f1a62ef907ea0416ca9fdbb1028156808"
+    },
+    "toolkit/03-dev-code/SKILL/android-native/kotlin-control-flow/SKILL.md": {
+      "bytes": 3364,
+      "sha256": "ac3286ea293dcd3bc5e716a368ac9b4be328bb036d029c114a8e1cca25e24220"
+    },
+    "toolkit/03-dev-code/SKILL/android-native/using-chrisbanes-skills/SKILL.md": {
+      "bytes": 3926,
+      "sha256": "6ba4ad3283898bcd5bd8930397c8c84d252356fac19a96adc7de6fe25ae944db"
+    },
+    "toolkit/03-dev-code/SKILL/react-native-expo/react-native-best-practices/POWER.md": {
+      "bytes": 8484,
+      "sha256": "f75c89345c2899246316c8c157b4125d08c277c3761d3c329f41deaa21624135"
+    },
+    "toolkit/03-dev-code/SKILL/react-native-expo/react-native-best-practices/SKILL.md": {
+      "bytes": 12586,
+      "sha256": "15bc21cbed5260aa921ea11d26f2845c648b1481801ad9a185ae63c1586d9cec"
+    },
+    "toolkit/03-dev-code/SKILL/react-native-expo/react-native-best-practices/references/bundle-analyze-app.md": {
+      "bytes": 5669,
+      "sha256": "e643f1fc76e7c2dfdcbcddd8b4e8f815f95a9cdcc55028ef903dd754e82f7b85"
+    },
+    "toolkit/03-dev-code/SKILL/react-native-expo/react-native-best-practices/references/bundle-analyze-js.md": {
+      "bytes": 7293,
+      "sha256": "fb3fe0df900fc8c344cbf9f8b26aa7f9dedd8f989471e8fb3919035eee7dffde"
+    },
+    "toolkit/03-dev-code/SKILL/react-native-expo/react-native-best-practices/references/bundle-barrel-exports.md": {
+      "bytes": 5656,
+      "sha256": "34fb0313646e7fddb127b10aa2a4f8972676b27fc17019559e4330baa8a8259e"
+    },
+    "toolkit/03-dev-code/SKILL/react-native-expo/react-native-best-practices/references/bundle-code-splitting.md": {
+      "bytes": 7800,
+      "sha256": "3d5c121655108f733443063572e674e83ca57d4c5a4e5aade6988933e310d6c1"
+    },
+    "toolkit/03-dev-code/SKILL/react-native-expo/react-native-best-practices/references/bundle-hermes-mmap.md": {
+      "bytes": 4300,
+      "sha256": "e5bef38b21d3f1b02e348b2ed15a11bdccad79824627a7c6bb3f159b84fac5e3"
+    },
+    "toolkit/03-dev-code/SKILL/react-native-expo/react-native-best-practices/references/bundle-library-size.md": {
+      "bytes": 4314,
+      "sha256": "ffca0063c5b2ad8f94ad350cbc3d5bec7b3ee6eb878db71158e3308372786a63"
+    },
+    "toolkit/03-dev-code/SKILL/react-native-expo/react-native-best-practices/references/bundle-native-assets.md": {
+      "bytes": 5249,
+      "sha256": "fb509f8ab2d751c240ccb89eb1771c7bf01be331cd0565f158e06d84156f9d60"
+    },
+    "toolkit/03-dev-code/SKILL/react-native-expo/react-native-best-practices/references/bundle-r8-android.md": {
+      "bytes": 5587,
+      "sha256": "1fd317cd47b9ec35fcf6aee3a9d9eedab5aa9fc916c976e0dcaf9fb60216df53"
+    },
+    "toolkit/03-dev-code/SKILL/react-native-expo/react-native-best-practices/references/bundle-tree-shaking.md": {
+      "bytes": 5905,
+      "sha256": "743e79e524ba385dcf70b1b5bd98b4cb0e4345ef799f0e431912e5d68e64ce56"
+    },
+    "toolkit/03-dev-code/SKILL/react-native-expo/react-native-best-practices/references/js-animations-reanimated.md": {
+      "bytes": 8288,
+      "sha256": "e0ca623933df52620f5f176a52e958c11e79e7404d7648310538ab251b7e5361"
+    },
+    "toolkit/03-dev-code/SKILL/react-native-expo/react-native-best-practices/references/js-atomic-state.md": {
+      "bytes": 5457,
+      "sha256": "164a5c9e8fa375c7973601d85b78fd7e8ab4c65fb033088c0d871f28f4d7be0b"
+    },
+    "toolkit/03-dev-code/SKILL/react-native-expo/react-native-best-practices/references/js-bottomsheet.md": {
+      "bytes": 12538,
+      "sha256": "deb6a6320372294733d27a06cd6a880b6297dbb08cd0bfb80ae309dadd9e0be8"
+    },
+    "toolkit/03-dev-code/SKILL/react-native-expo/react-native-best-practices/references/js-concurrent-react.md": {
+      "bytes": 6890,
+      "sha256": "b1c512f5dbbe01d225de44dd3162718f3af0b807ddcfc83a118c9765d63322cd"
+    },
+    "toolkit/03-dev-code/SKILL/react-native-expo/react-native-best-practices/references/js-lists-flatlist-flashlist.md": {
+      "bytes": 6221,
+      "sha256": "fbe702d14c1ace81f0bea0d471597417c62a75862d768ebcd4871dfb0cb9660c"
+    },
+    "toolkit/03-dev-code/SKILL/react-native-expo/react-native-best-practices/references/js-measure-fps.md": {
+      "bytes": 5484,
+      "sha256": "b72ebb667db18210e09f90b5defa7a866c15c69dd17f7f7a17e59532254c0cb5"
+    },
+    "toolkit/03-dev-code/SKILL/react-native-expo/react-native-best-practices/references/js-memory-leaks.md": {
+      "bytes": 5469,
+      "sha256": "a1dea1c9e18ad3ac8e8ec22c164639c51fd45ff2ea102595a452310b822261e7"
+    },
+    "toolkit/03-dev-code/SKILL/react-native-expo/react-native-best-practices/references/js-profile-react.md": {
+      "bytes": 6009,
+      "sha256": "30a56a706dd85ed43a071fd9969157d900058de3102b380039156f25f20451b0"
+    },
+    "toolkit/03-dev-code/SKILL/react-native-expo/react-native-best-practices/references/js-react-compiler.md": {
+      "bytes": 7633,
+      "sha256": "2ba08c3a728e8e875c8aae186ef93cb2cc6bd49486d77afbd7e98c27226b4129"
+    },
+    "toolkit/03-dev-code/SKILL/react-native-expo/react-native-best-practices/references/js-uncontrolled-components.md": {
+      "bytes": 5711,
+      "sha256": "1ae2af3fcc6aee79b8c13ef04e6db135a9374a3b2edc9a08bd72660284c0d98c"
+    },
+    "toolkit/03-dev-code/SKILL/react-native-expo/react-native-best-practices/references/native-android-16kb-alignment.md": {
+      "bytes": 3875,
+      "sha256": "62d2232a51443f1d6bde24c160618bdef21c9f68a3771bfcaf24b44e90a81a17"
+    },
+    "toolkit/03-dev-code/SKILL/react-native-expo/react-native-best-practices/references/native-measure-tti.md": {
+      "bytes": 6748,
+      "sha256": "6cfc2c99e6142a7a41acbf9987c8241857ab08fffce43cae9233313a82fd185c"
+    },
+    "toolkit/03-dev-code/SKILL/react-native-expo/react-native-best-practices/references/native-memory-leaks.md": {
+      "bytes": 5833,
+      "sha256": "73d435e2ddefa25d41ea7f0f9afde369c5d9a03818c82c2b92384b1c7a0e730c"
+    },
+    "toolkit/03-dev-code/SKILL/react-native-expo/react-native-best-practices/references/native-memory-patterns.md": {
+      "bytes": 6226,
+      "sha256": "c997bdfa1ca8cff48cfea1c9ddffea9a07720f45b8eef5c60c135dfeabfbbf5f"
+    },
+    "toolkit/03-dev-code/SKILL/react-native-expo/react-native-best-practices/references/native-platform-setup.md": {
+      "bytes": 3898,
+      "sha256": "1cbef480388ab67df0ab258444d59bf6f4a36eb0cbdf496b703b91a0fd20e273"
+    },
+    "toolkit/03-dev-code/SKILL/react-native-expo/react-native-best-practices/references/native-profiling.md": {
+      "bytes": 4498,
+      "sha256": "4afaf1d4ebdfbc3f9d1c031052fe40b408b653b447c707fd2a7f07d3c58e398f"
+    },
+    "toolkit/03-dev-code/SKILL/react-native-expo/react-native-best-practices/references/native-sdks-over-polyfills.md": {
+      "bytes": 6471,
+      "sha256": "60f82c6a4da08fadc5a5ac9d6fb8bb14b12e25fef57a11a70e359c0f5fd2d7cf"
+    },
+    "toolkit/03-dev-code/SKILL/react-native-expo/react-native-best-practices/references/native-threading-model.md": {
+      "bytes": 7112,
+      "sha256": "ab93decd5e9d5988f444cf47e7b48740db79927dd8337a1be8afba9e7c211575"
+    },
+    "toolkit/03-dev-code/SKILL/react-native-expo/react-native-best-practices/references/native-turbo-modules.md": {
+      "bytes": 5860,
+      "sha256": "a13fb7266d02422e9736da8e1e078aa519a06fa1209089504199ad8549897acc"
+    },
+    "toolkit/03-dev-code/SKILL/react-native-expo/react-native-best-practices/references/native-view-flattening.md": {
+      "bytes": 5416,
+      "sha256": "4b150f40a3b39329e571dfb02a6c82f43a193925e006af2d842e67542d917029"
+    },
+    "toolkit/03-dev-code/SKILL/react-native-expo/react-native-patterns/SKILL.md": {
+      "bytes": 11752,
+      "sha256": "caf04da7ea1f20213b010f24dc19a8a20f1939c928156caa2f0482f26c31b12b"
+    },
+    "toolkit/03-dev-code/SKILL/react-native-expo/vercel-react-native-skills/AGENTS.md": {
+      "bytes": 73771,
+      "sha256": "72996343b8260800fbeb9af63ddaed91f14b65dc547e0922f9f8e9bd72076cbf"
+    },
+    "toolkit/03-dev-code/SKILL/react-native-expo/vercel-react-native-skills/README.md": {
+      "bytes": 5064,
+      "sha256": "d60d7623005a833b928be6a109ed9d14dea43d7217fb534e8f2e4de5fc1f0ddf"
+    },
+    "toolkit/03-dev-code/SKILL/react-native-expo/vercel-react-native-skills/SKILL.md": {
+      "bytes": 4439,
+      "sha256": "4012750a5ccbe064ca04af3835d5d1b011979d2d09d9b6df1c8128fac58e0a66"
+    },
+    "toolkit/03-dev-code/SKILL/react-native-expo/vercel-react-native-skills/rules/_sections.md": {
+      "bytes": 2228,
+      "sha256": "21d7445e92bd7d393b420118c3fb9ebbf30aaf123a15143afb6c0b1b562cfdfd"
+    },
+    "toolkit/03-dev-code/SKILL/react-native-expo/vercel-react-native-skills/rules/_template.md": {
+      "bytes": 631,
+      "sha256": "99df2a3ea088c6c22de2484ddc7e964d0e9923846f44c63380343ecc64455442"
+    },
+    "toolkit/03-dev-code/SKILL/react-native-expo/vercel-react-native-skills/rules/animation-derived-value.md": {
+      "bytes": 1373,
+      "sha256": "689228e9d59227934f296563963951aa9368be0afb2a188f650de161203b1862"
+    },
+    "toolkit/03-dev-code/SKILL/react-native-expo/vercel-react-native-skills/rules/animation-gesture-detector-press.md": {
+      "bytes": 2559,
+      "sha256": "69408d4be669e74689d865c5f50a22fc3a802d521fe493371761abd20526e58e"
+    },
+    "toolkit/03-dev-code/SKILL/react-native-expo/vercel-react-native-skills/rules/animation-gpu-properties.md": {
+      "bytes": 2059,
+      "sha256": "f885e4179445da27cbc225e0a4aa3ed9016fc3507ca6f864392ba7a9d0bd7516"
+    },
+    "toolkit/03-dev-code/SKILL/react-native-expo/vercel-react-native-skills/rules/design-system-compound-components.md": {
+      "bytes": 1625,
+      "sha256": "dcb10900a58fcf57cca2e27c062d02df2325a7949e08fb45e9e05cc2b132b1a6"
+    },
+    "toolkit/03-dev-code/SKILL/react-native-expo/vercel-react-native-skills/rules/fonts-config-plugin.md": {
+      "bytes": 1393,
+      "sha256": "b92568774064a604e7a479d4c8d7263aed5609740e9161d2f2764bfff761905d"
+    },
+    "toolkit/03-dev-code/SKILL/react-native-expo/vercel-react-native-skills/rules/imports-design-system-folder.md": {
+      "bytes": 1418,
+      "sha256": "aa6337f7f2869a46a9141ec65e02c3da5c3bf051023899b82e0f0aef5bff8423"
+    },
+    "toolkit/03-dev-code/SKILL/react-native-expo/vercel-react-native-skills/rules/js-hoist-intl.md": {
+      "bytes": 1645,
+      "sha256": "b4b08622465ffcd5e5961878eb8c6d7359aa242d16c990b59941c9111962fe46"
+    },
+    "toolkit/03-dev-code/SKILL/react-native-expo/vercel-react-native-skills/rules/list-performance-callbacks.md": {
+      "bytes": 1059,
+      "sha256": "db800e9dfe0080eb4954b96e2a362ee8344d08e08b1ed06bc8059450f3e6f0dd"
+    },
+    "toolkit/03-dev-code/SKILL/react-native-expo/vercel-react-native-skills/rules/list-performance-function-references.md": {
+      "bytes": 4133,
+      "sha256": "b54470e41d578b207ee3223f6853efb7fbf8e5f83d9aecf8da16989072f99544"
+    },
+    "toolkit/03-dev-code/SKILL/react-native-expo/vercel-react-native-skills/rules/list-performance-images.md": {
+      "bytes": 1417,
+      "sha256": "e88f16ac113c29230d674b7aa2c66c31d5772a74b1ea378d48a97b1143fe6c19"
+    },
+    "toolkit/03-dev-code/SKILL/react-native-expo/vercel-react-native-skills/rules/list-performance-inline-objects.md": {
+      "bytes": 2308,
+      "sha256": "e2a80aac0f29c6abaf0163c1cc273d09cc8a0030ec077ca2022bbf5c309e4625"
+    },
+    "toolkit/03-dev-code/SKILL/react-native-expo/vercel-react-native-skills/rules/list-performance-item-expensive.md": {
+      "bytes": 2466,
+      "sha256": "a68cc8ec5dba3c55761bd5df9dfd3d98485f63076868d3e03af15f1e58907ce3"
+    },
+    "toolkit/03-dev-code/SKILL/react-native-expo/vercel-react-native-skills/rules/list-performance-item-memo.md": {
+      "bytes": 2250,
+      "sha256": "38ec1d149ee485434d11c2b9e2101dfc914afadae4a0738ca905f26b05f708c1"
+    },
+    "toolkit/03-dev-code/SKILL/react-native-expo/vercel-react-native-skills/rules/list-performance-item-types.md": {
+      "bytes": 2749,
+      "sha256": "eed225f4e9e504bfa7db01f5395d1402545cc47de8adf1829a9408cd5d158cf6"
+    },
+    "toolkit/03-dev-code/SKILL/react-native-expo/vercel-react-native-skills/rules/list-performance-virtualize.md": {
+      "bytes": 1742,
+      "sha256": "98cad308118acb4d6e8e975c0168ce56e2d48ca52ed47f23bc9a30667c066ada"
+    },
+    "toolkit/03-dev-code/SKILL/react-native-expo/vercel-react-native-skills/rules/monorepo-native-deps-in-app.md": {
+      "bytes": 1091,
+      "sha256": "8368b109027fcec1b8a81bfb99718aef2b64edaba77107f73d7c465cc5a14217"
+    },
+    "toolkit/03-dev-code/SKILL/react-native-expo/vercel-react-native-skills/rules/monorepo-single-dependency-versions.md": {
+      "bytes": 1351,
+      "sha256": "61c01b9eaab1e319bf078204231fb573bdfea3c43a6eb99e7ef73ee95d474ccc"
+    },
+    "toolkit/03-dev-code/SKILL/react-native-expo/vercel-react-native-skills/rules/navigation-native-navigators.md": {
+      "bytes": 4941,
+      "sha256": "6642dedb57e72f0b56df5fbc3d5b8aaa91fc4456932c12712cfd076d393f32c6"
+    },
+    "toolkit/03-dev-code/SKILL/react-native-expo/vercel-react-native-skills/rules/react-compiler-destructure-functions.md": {
+      "bytes": 1274,
+      "sha256": "8048926a4fa3fbd28fc0ecf4ba4c383a2f0ed06c2fd7330dd4a15d7f4e548044"
+    },
+    "toolkit/03-dev-code/SKILL/react-native-expo/vercel-react-native-skills/rules/react-compiler-reanimated-shared-values.md": {
+      "bytes": 1268,
+      "sha256": "3174303a72b6849ff0eda5cd9f9650f26baa5f31ed28d35a75076af714fb2ffc"
+    },
+    "toolkit/03-dev-code/SKILL/react-native-expo/vercel-react-native-skills/rules/react-state-dispatcher.md": {
+      "bytes": 2255,
+      "sha256": "7ec5b653e3ff8d9ca97d8d66981cce5590c0e49fa79ab708fd6324542b588870"
+    },
+    "toolkit/03-dev-code/SKILL/react-native-expo/vercel-react-native-skills/rules/react-state-fallback.md": {
+      "bytes": 1735,
+      "sha256": "eb76e386d71680bfdfc0ab64dba1221f4d3d0fdcb4980bb4a871381d58e9e58b"
+    },
+    "toolkit/03-dev-code/SKILL/react-native-expo/vercel-react-native-skills/rules/react-state-minimize.md": {
+      "bytes": 1740,
+      "sha256": "31b989de61defda1c61d8578c4700efd64a427218c3f3dbb7062a1666e1cbe43"
+    },
+    "toolkit/03-dev-code/SKILL/react-native-expo/vercel-react-native-skills/rules/rendering-no-falsy-and.md": {
+      "bytes": 1812,
+      "sha256": "7300fa45ac3a4968db144727a21052421bc62de9b5e9f6f59e28bd16d2fff001"
+    },
+    "toolkit/03-dev-code/SKILL/react-native-expo/vercel-react-native-skills/rules/rendering-text-in-text-component.md": {
+      "bytes": 697,
+      "sha256": "fc67897b6126b6b5574f4d284a6c5b2282528fe89de8ec08e6cfd2a86ab5b235"
+    },
+    "toolkit/03-dev-code/SKILL/react-native-expo/vercel-react-native-skills/rules/scroll-position-no-state.md": {
+      "bytes": 1936,
+      "sha256": "70aa1ee679e755556d7b01b326431fe898d3c23ddba40d0da6bdac23c87a1525"
+    },
+    "toolkit/03-dev-code/SKILL/react-native-expo/vercel-react-native-skills/rules/state-ground-truth.md": {
+      "bytes": 2172,
+      "sha256": "9f3efc73d2e66a5deb3199c9774f42524cd6a0f69784af38301946be5d747cb5"
+    },
+    "toolkit/03-dev-code/SKILL/react-native-expo/vercel-react-native-skills/rules/ui-expo-image.md": {
+      "bytes": 1648,
+      "sha256": "c3c13cce3dd2cc7f8a9b4861e5743af98f62e28f5699f72f492e79a335cfae55"
+    },
+    "toolkit/03-dev-code/SKILL/react-native-expo/vercel-react-native-skills/rules/ui-image-gallery.md": {
+      "bytes": 2546,
+      "sha256": "b34d1ba03710ed9622187716541ae618968e7d03bc28895c2ac918d3cc5853f1"
+    },
+    "toolkit/03-dev-code/SKILL/react-native-expo/vercel-react-native-skills/rules/ui-measure-views.md": {
+      "bytes": 2232,
+      "sha256": "170d058abc4900ea9e851e54f5e8b437ffffc2c9d3847ae35e30a515c8990c3d"
+    },
+    "toolkit/03-dev-code/SKILL/react-native-expo/vercel-react-native-skills/rules/ui-menus.md": {
+      "bytes": 4598,
+      "sha256": "5964adbecfe9aeb28d736a4eaacec6469a1c4ca3f48779d243eb38b6d181cfe9"
+    },
+    "toolkit/03-dev-code/SKILL/react-native-expo/vercel-react-native-skills/rules/ui-native-modals.md": {
+      "bytes": 1859,
+      "sha256": "d803493b3046ad31cbb2c189f1fffb948fd0055050e3c322589bd548421e23a8"
+    },
+    "toolkit/03-dev-code/SKILL/react-native-expo/vercel-react-native-skills/rules/ui-pressable.md": {
+      "bytes": 1534,
+      "sha256": "52cdbad127d713d7d32c59ef74ab1bbd6dca211edc9b25993453f7f4545e79fa"
+    },
+    "toolkit/03-dev-code/SKILL/react-native-expo/vercel-react-native-skills/rules/ui-safe-area-scroll.md": {
+      "bytes": 1579,
+      "sha256": "3dd776caef2344d73529010940b50042861d06d31a192122a4df64bc06aed0e8"
+    },
+    "toolkit/03-dev-code/SKILL/react-native-expo/vercel-react-native-skills/rules/ui-scrollview-content-inset.md": {
+      "bytes": 1317,
+      "sha256": "89e4bbe5e9a602660f4155e9d4c0dee09db1adf21c73f47213cd67ec896e5a13"
+    },
+    "toolkit/03-dev-code/SKILL/react-native-expo/vercel-react-native-skills/rules/ui-styling.md": {
+      "bytes": 2212,
+      "sha256": "cdef4d8b1a097b844e5992ab78e66a2dc604faf1e90f8d325a0eb116e8ef6a7e"
+    },
+    "toolkit/03-dev-code/addons/backend-supabase.md": {
+      "bytes": 2827,
+      "sha256": "e439b3e455e56f80fc89587b27f7be545255415f04f411ae6c9b77b78fd4d7b6"
+    },
+    "toolkit/03-dev-code/build-sequences/android-native.md": {
+      "bytes": 16833,
+      "sha256": "b30971341c84b394aa0817f22764754a03d43e6f11ee7b1f6d513a1c6c5489f9"
+    },
+    "toolkit/03-dev-code/build-sequences/react-native-expo.md": {
+      "bytes": 13005,
+      "sha256": "b0a01fd9501785076c93faa4f7c79d0ffc1f815e6c9d7fdbab9bbb74b7050c6b"
+    },
+    "toolkit/03-dev-code/global/footguns-protocol.md": {
+      "bytes": 2252,
+      "sha256": "372efeb98ef42f57606ae010319dc317a1a3fb37609afefe37031e4079a31c8d"
+    },
+    "toolkit/03-dev-code/global/role-and-philosophy.md": {
+      "bytes": 3218,
+      "sha256": "d0ae94c1370c1c4c4de93306b591ab1c9a2093dfd75eb73c9e91e1c588beee31"
+    },
+    "toolkit/03-dev-code/global/token-efficiency-protocol.md": {
+      "bytes": 1752,
+      "sha256": "bf8da2f2eeb7267113dbcbecb29ec1201aae1a2e7649fbb2e8076a00b3df5f44"
+    },
+    "toolkit/03-dev-code/migration/README.md": {
+      "bytes": 1580,
+      "sha256": "05fc5a8bc9a5130c5b982c2ea3286202f2e30d343be5f73574f799b39077acf1"
+    },
+    "toolkit/03-dev-code/migration/android-native-to-rn.md": {
+      "bytes": 349,
+      "sha256": "747a2de371e3b7a6be27c794fb78c4364ab753496aa42ea4b8851d293c1ea53c"
+    },
+    "toolkit/03-dev-code/migration/ios-native-to-android-native.md": {
+      "bytes": 10319,
+      "sha256": "9f8ba1afad6c3a2a9bb0e9fe64c4c622887105da4a8b4ce0d22a1ece599b9c6a"
+    },
+    "toolkit/03-dev-code/migration/ios-native-to-rn.md": {
+      "bytes": 5578,
+      "sha256": "265f952b22369c0d2a24045a59b452165b99c12952fbcef7a7be5f9de6865f5f"
+    },
+    "toolkit/03-dev-code/project-template.md": {
+      "bytes": 1747,
+      "sha256": "925380f026c52a7901b32f1f9ad39346b88f728d99b540ccefac79fa530a404e"
+    },
+    "toolkit/03-dev-code/reusable-modules/android-native/camera-and-pose.md": {
+      "bytes": 8730,
+      "sha256": "d8b46c25f515e75400db72c4d26f090edbf79db74b7968b6c88a295acd7b3534"
+    },
+    "toolkit/03-dev-code/reusable-modules/android-native/data-layer.md": {
+      "bytes": 7200,
+      "sha256": "00643ed1cb85942a31f684f8de45c1851ce88415e3edaba661b78e24a6634e5f"
+    },
+    "toolkit/03-dev-code/reusable-modules/android-native/mvi-templates.md": {
+      "bytes": 7536,
+      "sha256": "4c1846b5d0512687516e3f32c9bb3e0857d01c544be3d14821dd30460b92a602"
+    },
+    "toolkit/03-dev-code/reusable-modules/android-native/navigation.md": {
+      "bytes": 5952,
+      "sha256": "323b39b5069039a6cf30354c3e15cbae89f0d19c8218d27a6df01c01140df603"
+    },
+    "toolkit/03-dev-code/reusable-modules/android-native/testing.md": {
+      "bytes": 5521,
+      "sha256": "929887c2f418c1e46381dcd89bd2c7ac853ad0f0f12c346bd0d18272a6edfd4e"
+    },
+    "toolkit/03-dev-code/reusable-modules/react-native-expo/README.md": {
+      "bytes": 888,
+      "sha256": "f61b2d878b4a3455cedec5364f9a12f9994ec692da62c2ffd310d4f6477f1c32"
+    },
+    "toolkit/03-dev-code/reusable-modules/react-native-expo/state-management.md": {
+      "bytes": 2097,
+      "sha256": "9336e8db2088e9e41bb854d8df90735bc9b2f53c4d0fe7deaca667384b09da84"
+    },
+    "toolkit/03-dev-code/tech-stacks/android-native.md": {
+      "bytes": 19027,
+      "sha256": "e83325995f5bdc542f5cae916513291be41a8969576a354fd7726247a7645710"
+    },
+    "toolkit/03-dev-code/tech-stacks/ios-native.md": {
+      "bytes": 535,
+      "sha256": "4beb94d1f2bc0b9f7a759a1c3c62ee015d19f1e7ee2a7099d8922ea0c885b754"
+    },
+    "toolkit/03-dev-code/tech-stacks/react-native-expo.md": {
+      "bytes": 8906,
+      "sha256": "ef4eafa6f22da36701b34680ea0a5613db2719d0c7493ebfba911a30851dceb9"
+    },
+    "toolkit/03-dev-code/user-profiles/dev.md": {
+      "bytes": 768,
+      "sha256": "006bd3663814947215774c62d572b8ce10ab25b75c4a4b1b6091b942d5e0ef6b"
+    },
+    "toolkit/03-dev-code/user-profiles/non-dev.md": {
+      "bytes": 1600,
+      "sha256": "c9efdb96c04f052baad59b55812c36b819039d2c64d642af5270348f47cb53fb"
+    },
+    "toolkit/04-qa-testing/README.md": {
+      "bytes": 736,
+      "sha256": "262c1138327aa7eba2640c2701137e34ff97e4c710f1bc61b43ac519fa2d5d4f"
+    },
+    "toolkit/README.md": {
+      "bytes": 8955,
+      "sha256": "aa06baf8db7307e5ebc53e4957812eec8d92fe11cafd0f089982da9b2e9b5b2c"
+    }
+  },
+  "excluded": [
+    "build outputs",
+    "local.properties",
+    "keystores"
+  ],
+  "archive_sha256": "64f6f75c2d80caac3411a2618e49034b6ff81b2608946c9d3963f07049136f64"
+}

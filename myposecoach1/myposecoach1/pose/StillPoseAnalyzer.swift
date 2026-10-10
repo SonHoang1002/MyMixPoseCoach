@@ -1,5 +1,6 @@
 import Foundation
 import ImageIO
+import MediaPipeTasksVision
 import UIKit
 
 // Nhận diện khung xương trên MỘT ẢNH TĨNH.
@@ -14,13 +15,13 @@ import UIKit
 //     khung hình video → VideoPoseAnalyzer
 //     camera live      → PoseDetector
 //
-// **Bất biến quan trọng nhất được giữ ở đây:** ảnh mẫu và khung hình camera đều đi
-// ra cùng một kiểu [PoseFrame], dựng bằng cùng một engine [VisionPose].
-//
-// Trước đây bọc MediaPipe (nạp model một lần rồi dùng lại). Nay Vision không cần
-// nạp model — mỗi lần gọi dựng request mới, không có tài nguyên phải giữ, nên bỏ
-// hẳn phần "ensureLandmarker"/khoá dùng chung.
+// **Bất biến quan trọng nhất:** ảnh mẫu và camera đều dùng cùng MediaPipe Full và
+// cùng hàm chuyển đổi `MediaPipePose.frame`. Vision chỉ dùng khi MediaPipe lỗi.
 nonisolated enum StillPoseAnalyzer {
+    private static let lock = NSLock()
+    private static var landmarker: PoseLandmarker?
+    private static var loadedModel: String?
+    private static var useVisionFallback = false
 
     /// Phân tích một ảnh. Trả về nil nếu KHÔNG chạy được request của Vision.
     /// Trả về [PoseFrame] rỗng nếu chạy được nhưng **không thấy người nào** —
@@ -34,14 +35,46 @@ nonisolated enum StillPoseAnalyzer {
     /// - Parameter modelAsset: giữ lại cho tương thích API cũ; Vision không dùng.
     static func analyze(image: UIImage,
                         modelAsset: String = PoseDetector.MODEL_FULL) -> PoseFrame? {
-        guard let cg = image.cgImage else {
-            NSLog("StillPoseAnalyzer: UIImage không có CGImage.")
-            return nil
+        lock.lock()
+        defer { lock.unlock() }
+        if landmarker == nil, !useVisionFallback {
+            do {
+                landmarker = try MediaPipePose.makeLandmarker(mode: .image, modelAsset: modelAsset)
+                loadedModel = modelAsset
+            } catch {
+                useVisionFallback = true
+                NSLog("StillPoseAnalyzer: MediaPipe không sẵn sàng, dùng Vision fallback — \(error)")
+            }
+        } else if loadedModel != nil, loadedModel != modelAsset {
+            landmarker = nil
+            loadedModel = nil
+            do {
+                landmarker = try MediaPipePose.makeLandmarker(mode: .image, modelAsset: modelAsset)
+                loadedModel = modelAsset
+            } catch {
+                useVisionFallback = true
+            }
         }
-        let orientation = CGImagePropertyOrientation(image.imageOrientation)
-        return VisionPose.frame(fromCGImage: cg, orientation: orientation)
+        if let landmarker {
+            do {
+                return MediaPipePose.frame(
+                    from: try landmarker.detect(image: MediaPipePose.image(image)),
+                    timestampMs: 0
+                )
+            } catch {
+                NSLog("StillPoseAnalyzer: MediaPipe inference thất bại — \(error)")
+                return nil
+            }
+        }
+        guard let cg = image.cgImage else { return nil }
+        return VisionPose.frame(fromCGImage: cg, orientation: CGImagePropertyOrientation(image.imageOrientation))
     }
 
     /// Giữ lại cho tương thích API cũ. Vision không có tài nguyên phải giải phóng.
-    static func release() {}
+    static func release() {
+        lock.lock()
+        landmarker = nil
+        loadedModel = nil
+        lock.unlock()
+    }
 }

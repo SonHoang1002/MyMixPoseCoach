@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		8B1F2518BE4FB4147ECFB85E /* Pods_myposecoach1.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5C5A83B012DC7153C3FE1759 /* Pods_myposecoach1.framework */; };
+		A10000000000000000000001 /* MediaPipeTasksVision in Frameworks */ = {isa = PBXBuildFile; productRef = A10000000000000000000003 /* MediaPipeTasksVision */; };
+		A20000000000000000000001 /* onnxruntime in Frameworks */ = {isa = PBXBuildFile; productRef = A20000000000000000000003 /* onnxruntime */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -31,6 +33,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				8B1F2518BE4FB4147ECFB85E /* Pods_myposecoach1.framework in Frameworks */,
+				A10000000000000000000001 /* MediaPipeTasksVision in Frameworks */,
+				A20000000000000000000001 /* onnxruntime in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -92,6 +96,10 @@
 				E5E5C5043075435000F47AEA /* myposecoach1 */,
 			);
 			name = myposecoach1;
+			packageProductDependencies = (
+				A10000000000000000000003 /* MediaPipeTasksVision */,
+				A20000000000000000000003 /* onnxruntime */,
+			);
 			productName = myposecoach1;
 			productReference = E5E5C5023075435000F47AEA /* myposecoach1.app */;
 			productType = "com.apple.product-type.application";
@@ -122,6 +130,10 @@
 			minimizedProjectReferenceProxies = 1;
 			preferredProjectObjectVersion = 77;
 			productRefGroup = E5E5C5033075435000F47AEA /* Products */;
+			packageReferences = (
+				A10000000000000000000002 /* XCRemoteSwiftPackageReference "mediapipe" */,
+				A20000000000000000000002 /* XCRemoteSwiftPackageReference "onnxruntime-swift-package-manager" */,
+			);
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
@@ -389,6 +401,38 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		A10000000000000000000002 /* XCRemoteSwiftPackageReference "mediapipe" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/google-ai-edge/mediapipe.git";
+			requirement = {
+				kind = revision;
+				revision = 821db8a4428baf58bf4c09a0330c937e6e0a3753;
+			};
+		};
+		A20000000000000000000002 /* XCRemoteSwiftPackageReference "onnxruntime-swift-package-manager" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/microsoft/onnxruntime-swift-package-manager.git";
+			requirement = {
+				kind = revision;
+				revision = b7fb7f7dea8a2469e6335d95a61b8f36d0dc83b2;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		A10000000000000000000003 /* MediaPipeTasksVision */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A10000000000000000000002 /* XCRemoteSwiftPackageReference "mediapipe" */;
+			productName = MediaPipeTasksVision;
+		};
+		A20000000000000000000003 /* onnxruntime */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A20000000000000000000002 /* XCRemoteSwiftPackageReference "onnxruntime-swift-package-manager" */;
+			productName = onnxruntime;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = E5E5C4FA3075435000F47AEA /* Project object */;
 }

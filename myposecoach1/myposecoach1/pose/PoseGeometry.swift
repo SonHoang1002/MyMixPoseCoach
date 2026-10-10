@@ -16,10 +16,8 @@ import Foundation
 //   x: 0.0 = mép TRÁI khung   →  1.0 = mép PHẢI khung
 //   y: 0.0 = mép TRÊN khung   →  1.0 = mép DƯỚI khung   (y càng lớn = càng THẤP)
 //
-// Bản iOS dùng Apple Vision (xem `VisionPose.swift` — nơi DUY NHẤT được đổi hệ
-// toạ độ của Vision sang quy ước này). Trước đây dùng MediaPipe cùng model .task
-// với Android; đã bỏ vì MediaPipeTasksVision 1.0.0 sập trên iOS 27. Quy ước giữ
-// NGUYÊN, KHÔNG lật.
+// Bản iOS chính dùng MediaPipe cùng model .task với Android nên đã đúng quy ước;
+// `VisionPose.swift` chỉ còn là fallback và tự đổi hệ tọa độ về quy ước này.
 
 /// Một điểm trên khung hình, theo đúng quy ước đã chốt ở trên.
 nonisolated struct P2: Equatable {
