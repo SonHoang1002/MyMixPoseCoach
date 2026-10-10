@@ -5,10 +5,11 @@ import UIKit
 /// và bảng gắn nhãn ảnh tự nhập, để không phân tích lại và chắc chắn các bên nói về
 /// cùng một kết quả.
 ///
-/// Bản port từ `home/PhanTichAnhMau.kt` của Android. Khác một chỗ: **bản iOS chưa
-/// có bộ nhận diện khuôn mặt** (`FaceAnalyzer` của Android dùng ML Kit; iOS chỉ có
-/// struct `FaceInfo` rỗng). Nên `face` luôn là `nil` — mục "Mắt mở" và các mốc đo
-/// dựa vào mặt sẽ do `TemplateProfile.from` tự bỏ qua và ghi lý do, đúng luật
+/// Bản port từ `home/PhanTichAnhMau.kt` của Android. Khác một chỗ: **bản Android
+/// nhận diện mặt bằng ML Kit, bản iOS dùng `FaceAnalyzer` (Apple Vision
+/// `VNDetectFaceRectanglesRequest`)** — `face` có thể là `nil` khi không thấy mặt
+/// (mẫu quay lưng) hoặc khi `eyesOpen` chưa đo được; các mốc dựa vào nó sẽ do
+/// `TemplateProfile.from` tự bỏ qua và ghi lý do, đúng luật
 /// "mục không đo được thì bỏ ra, không trừ điểm".
 nonisolated struct PhanTichAnhMau {
     let verdict: TemplateVerdict
@@ -42,13 +43,12 @@ nonisolated func phanTichAnhMau(file: URL) -> PhanTichAnhMau {
     let v = TemplateGate.check(frame)
 
     // Nhận diện mặt CHỈ chạy khi ảnh đã qua cổng kiểm — ảnh bị từ chối thì chẳng
-    // dùng tới, chạy chỉ tốn thời gian chờ. Bản iOS chưa có FaceAnalyzer nên face
-    // luôn nil (xem chú thích [PhanTichAnhMau]).
-    let face: FaceInfo? = nil
+    // dùng tới, chạy chỉ tốn thời gian chờ.
     let accepted: Bool = {
         if case .Accepted = v { return true }
         return false
     }()
+    let face: FaceInfo? = accepted ? bmp.flatMap(FaceAnalyzer.face(from:)) : nil
 
     let guide: [String]
     let diff: PoseDescriber.Difficulty?

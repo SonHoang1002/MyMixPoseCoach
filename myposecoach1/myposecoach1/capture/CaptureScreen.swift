@@ -16,7 +16,9 @@ import UIKit
 //   - Android xin quyền ở MainActivity, màn chụp chỉ hiện PermissionNotice; iOS
 //     không có chỗ đó nên xin quyền được gộp vào `CaptureController.start()` và
 //     bản này thêm nút "Mở Cài đặt" mở thẳng Cài đặt quyền.
-//   - Không có ML Kit Face Detector trên iOS → `face` luôn nil từ màn hình.
+//   - Android nhận diện mặt bằng ML Kit; iOS dùng `FaceAnalyzer` (Apple Vision
+//     `VNDetectFaceRectanglesRequest`) — chạy THƯA hơn nhịp khung hình (~300ms)
+//     vì con số mặt chỉ cần mới trong `FACE_TOI_DA_MS` mới nhất.
 //   - Không có nút back hệ thống → thoát màn bằng chevron + "Đổi mẫu" ở cột phải.
 struct CaptureScreen: View {
     let templateFile: URL
@@ -30,6 +32,9 @@ struct CaptureScreen: View {
     @State private var controller: CaptureController?
     @State private var poseDetector: PoseDetector?
     @State private var tilt = DeviceTilt()
+
+    /// Khoá tần suất nhận diện mặt trên camera live (xem `FaceThrottle`).
+    @State private var faceThrottle = FaceThrottle(intervalMs: 300)
 
     /// Đã `startFresh` lần đầu chưa. Quay lại từ màn kết quả KHÔNG được xoá state
     /// của lần chụp vừa rồi (`onAppear` chạy lại nhưng `daKhoiTao` vẫn true).
@@ -134,7 +139,15 @@ struct CaptureScreen: View {
             onError: { [vm] msg in
                 Task { @MainActor in vm.onCameraError(msg) }
             },
-            onFrameImage: nil
+            onFrameImage: { [vm, faceThrottle] image in
+                // ⚠️ GIỮ THỨ TỰ: PoseDetector chỉ gọi callback này khi có người
+                // nhận, và tự xoay pixels về đúng chiều trước khi gói UIImage.
+                // Chạy ảnh qua Vision bằng ĐÚNG orientation đó — góc mặt sẽ cùng
+                // không gian với khung xương, so 1-1 được với ảnh mẫu.
+                guard faceThrottle.allow() else { return }
+                let face = FaceAnalyzer.face(from: image)
+                Task { @MainActor in vm.onLiveFace(face) }
+            }
         )
         // Vẫn gọi `setup()` Ở LUỒNG NỀN: Vision không nạp model, nhưng giữ nguyên
         // luồng để không chặn main lúc vừa bấm vào màn và để đồng bộ cách khởi
@@ -214,15 +227,18 @@ struct CaptureScreen: View {
     private func phanTichAnhMau() async {
         let url = templateFile
         let ten = url.deletingPathExtension().lastPathComponent
-        let khoi = await Task.detached(priority: .userInitiated) { () -> (thumb: UIImage?, frame: PoseFrame?) in
+        let khoi = await Task.detached(priority: .userInitiated) { () -> (thumb: UIImage?, frame: PoseFrame?, face: FaceInfo?) in
             guard let anh = UprightBitmap.decode(file: url, shortSide: 320) else {
-                return (nil, nil)
+                return (nil, nil, nil)
             }
             let khung = StillPoseAnalyzer.analyze(image: anh, modelAsset: PoseDetector.MODEL_FULL)
-            return (anh, khung)
+            // Mặt nhận diện bằng CHÍNH ảnh mẫu đã đi qua khung xương — bất biến
+            // "ảnh mẫu và camera cùng một đường". Chỉ chạy khi tìm thấy người.
+            let face = (khung != nil && !khung!.isEmpty) ? FaceAnalyzer.face(from: anh) : nil
+            return (anh, khung, face)
         }.value
         vm.onTemplateAnalyzed(name: ten, thumb: khoi.thumb, frame: khoi.frame,
-                              minVisibility: MIN_VIS, face: nil)
+                              minVisibility: MIN_VIS, face: khoi.face)
     }
 
     // -----------------------------------------------------------------
@@ -628,6 +644,7 @@ struct CaptureScreen: View {
                 store: store,
                 profile: profile,
                 minVisibility: MIN_VIS,
+                faceAnalyze: { FaceAnalyzer.face(from: $0) },
                 tiLeKhung: tiLeLuu
             )
             let nguon = VideoFrameSource(file: url, targetShortSide: NGAN_CANH_DIEM)
@@ -722,6 +739,7 @@ struct CaptureScreen: View {
                 store: store,
                 profile: profile,
                 minVisibility: MIN_VIS,
+                faceAnalyze: { FaceAnalyzer.face(from: $0) },
                 tiLeKhung: tiLeLuu
             )
             for (i, f) in files.enumerated() {

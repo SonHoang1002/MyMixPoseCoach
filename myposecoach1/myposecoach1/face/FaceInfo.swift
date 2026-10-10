@@ -1,8 +1,10 @@
 import Foundation
 
 /**
- * Số liệu khuôn mặt lấy từ ML Kit. Mọi trường có thể `null` — không thấy mặt là
- * chuyện bình thường (mẫu quay lưng), không phải lỗi.
+ * Số liệu khuôn mặt. Android lấy từ ML Kit; iOS lấy từ `FaceAnalyzer`
+ * (`VNDetectFaceRectanglesRequest`) hoặc `nil` khi không thấy mặt. Mọi trường có
+ * thể `null` — không thấy mặt là chuyện bình thường (mẫu quay lưng), không phải
+ * lỗi.
  */
 struct FaceInfo {
 
@@ -22,6 +24,10 @@ struct FaceInfo {
      *
      * Lấy nhỏ hơn là cố ý: nhắm một mắt cũng là ảnh hỏng. Lấy trung bình sẽ cho
      * qua những tấm nháy một bên.
+     *
+     * iOS trả `nil`: Vision không đo được độ mở mắt đáng tin (`VNDetectFaceRectanglesRequest`
+     * không có chỉ số này). Mục MẮT MỞ là hậu kỳ → `TemplateProfile` tự bỏ và ghi
+     * lý do, đúng luật "không đo được thì bỏ ra, không trừ điểm".
      */
     var eyesOpen: Double?
 }

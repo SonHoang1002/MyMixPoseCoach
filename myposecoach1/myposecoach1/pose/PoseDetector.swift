@@ -146,8 +146,9 @@ nonisolated final class PoseDetector: @unchecked Sendable {
                                        rotationDegrees: orientationDegrees)
             self.onResult(frame, stats)
 
-            // Chỉ dựng ảnh khung khi có người nhận (tránh CIContext vô ích).
-            if let onFrameImage = self.onFrameImage,
+            // Chỉ dựng ảnh khung khi có người nhận (tránh CIContext vô ích). Khung
+            // rỗng = không thấy người → không có mặt để nhận diện, bỏ luôn.
+            if !frame.isEmpty, let onFrameImage = self.onFrameImage,
                let cg = Self.copyCGImage(from: pixelBuffer) {
                 onFrameImage(UIImage(cgImage: cg, scale: 1,
                                      orientation: UIImage.Orientation(orientation)))

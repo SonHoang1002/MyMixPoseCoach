@@ -137,6 +137,10 @@ private struct LibraryAlbumCell: View {
             ZStack(alignment: .bottomTrailing) {
                 Rectangle()
                     .fill(Color.black)
+                    // Ô phải LẤP ĐẦY bề ngang cột lưới, nếu không `LazyVGrid` đo chiều
+                    // rộng cột theo nội dung từng ô và các ô lệch nhau. Tương đương
+                    // `Modifier.fillMaxWidth()` của `LibraryScreen.kt` bên Android.
+                    .frame(maxWidth: .infinity)
                     .aspectRatio(0.75, contentMode: .fit)
                     .overlay {
                         if let thumb {
@@ -204,6 +208,7 @@ private struct LibraryAlbumViewer: View {
                         ForEach(Array(photos.enumerated()), id: \.offset) { _, img in
                             Rectangle()
                                 .fill(Color.black)
+                                .frame(maxWidth: .infinity)
                                 .aspectRatio(0.75, contentMode: .fit)
                                 .overlay {
                                     Image(uiImage: img)

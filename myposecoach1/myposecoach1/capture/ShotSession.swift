@@ -37,9 +37,10 @@ nonisolated final class ShotSession {
     /// Bộ nhận diện mặt. `nil` = bỏ qua góc mặt và mắt nhắm — hai mục đó tự bị
     /// loại khỏi cách tính, không trừ điểm.
     ///
-    /// Nhận dưới dạng hàm thay vì một lớp `FaceAnalyzer` cụ thể: bản iOS chưa có
-    /// bộ nhận diện mặt (cần Vision/ML Kit), và **không được chặn** việc chấm điểm
-    /// chỉ vì thiếu nó — `nil` là trạng thái hợp lệ chứ không phải lỗi.
+    /// Nhận dưới dạng hàm thay vì một lớp `FaceAnalyzer` cụ thể: iOS hiện dùng
+    /// `FaceAnalyzer` (Apple Vision `VNDetectFaceRectanglesRequest`), nhưng **không
+    /// được chặn** việc chấm điểm chỉ vì thiếu nó — `nil` là trạng thái hợp lệ chứ
+    /// không phải lỗi.
     private let faceAnalyze: ((UIImage) -> FaceInfo?)?
 
     /// Tỉ lệ khung người dùng chọn (ngang/dọc khi cầm dọc). Ảnh ra VÀ khung xương
