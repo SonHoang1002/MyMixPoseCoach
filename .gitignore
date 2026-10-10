@@ -1,3 +1,5 @@
 /myposecoach1/Pods/
 /baselines/**/source.zip
 /spikes/**/DerivedData/
+/testdata/pinterest-posecoach/
+__pycache__/
