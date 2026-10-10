@@ -48,14 +48,12 @@ jobs:
           xcodebuild build
           -workspace myposecoach1/myposecoach1.xcworkspace
           -scheme myposecoach1
-          -destination 'generic/platform=iOS Simulator'
+          -destination 'generic/platform=iOS'
           -derivedDataPath "$RUNNER_TEMP/DerivedData"
-          ARCHS=arm64
-          ONLY_ACTIVE_ARCH=YES
           CODE_SIGNING_ALLOWED=NO
 
       - name: Verify models in app bundle
         run: |
-          app="$RUNNER_TEMP/DerivedData/Build/Products/Debug-iphonesimulator/myposecoach1.app"
+          app="$RUNNER_TEMP/DerivedData/Build/Products/Debug-iphoneos/myposecoach1.app"
           test -f "$app/pose_landmarker_full.task"
           test -f "$app/geocalib/geocalib-mang-int8.onnx" || test -f "$app/geocalib-mang-int8.onnx"
