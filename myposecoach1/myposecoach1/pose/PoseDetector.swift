@@ -2,15 +2,14 @@ import CoreVideo
 import CoreImage
 import Foundation
 import ImageIO
+import MediaPipeTasksVision
 import UIKit
 
 // Lớp bọc nhận diện khung xương thời gian thực (camera).
 //
-// Trước đây bọc MediaPipe Pose Landmarker ở chế độ LIVE_STREAM. Nay dùng Apple
-// Vision (`VisionPose`) — cùng kiểu đầu ra [PoseFrame], nên tầng trên không đổi.
-//
-// Lý do đổi: MediaPipeTasksVision 1.0.0 sập trên iOS 27 (driver Metal AGX). Vision
-// là framework hệ điều hành, không có pipeline Metal riêng. Xem `VisionPose.swift`.
+// MediaPipe 1.1.0, model Full và các ngưỡng giống Android. Chế độ VIDEO chạy trên
+// hàng đợi nối tiếp, giữ tracking liên khung và chủ động bỏ khung khi đang bận.
+// Apple Vision chỉ là đường lui nếu MediaPipe không khởi tạo được.
 //
 // API công khai giữ NGUYÊN so với bản MediaPipe để các chỗ gọi khỏi sửa:
 //   setup() / close() / isReady / detect(pixelBuffer:orientationDegrees:) / detect(image:)
@@ -65,6 +64,9 @@ nonisolated final class PoseDetector: @unchecked Sendable {
     /// Đang có một khung hình chạy suy luận. Khung mới tới trong lúc bận sẽ BỎ —
     /// thà bỏ khung còn hơn xếp hàng làm trễ hình.
     private var busy = false
+    private var landmarker: PoseLandmarker?
+    private var useVisionFallback = false
+    private var lastTimestampMs: Int64 = -1
 
     var isReady: Bool {
         lock.lock()
@@ -82,11 +84,29 @@ nonisolated final class PoseDetector: @unchecked Sendable {
         self.onFrameImage = onFrameImage
     }
 
-    /// Vision không cần nạp model, nhưng giữ nguyên API: `setup()` chỉ đánh dấu sẵn
-    /// sàng. Chạy được cả trên luồng nền (tương thích cách gọi cũ).
     func setup() {
+        let created: PoseLandmarker?
+        let fallback: Bool
+        do {
+            created = try MediaPipePose.makeLandmarker(
+                mode: .video,
+                modelAsset: config.modelAsset,
+                minDetection: config.minPoseDetectionConfidence,
+                minPresence: config.minPosePresenceConfidence,
+                minTracking: config.minTrackingConfidence
+            )
+            fallback = false
+        } catch {
+            created = nil
+            fallback = true
+            NSLog("PoseDetector: MediaPipe không sẵn sàng, dùng Vision fallback — \(error)")
+        }
         lock.lock()
-        if !closed { ready = true }
+        if !closed {
+            landmarker = created
+            useVisionFallback = fallback
+            ready = true
+        }
         lock.unlock()
     }
 
@@ -94,6 +114,7 @@ nonisolated final class PoseDetector: @unchecked Sendable {
         lock.lock()
         closed = true
         ready = false
+        landmarker = nil
         lock.unlock()
     }
 
@@ -115,7 +136,6 @@ nonisolated final class PoseDetector: @unchecked Sendable {
         busy = true
         lock.unlock()
 
-        // Vision áp hướng xoay lên ảnh trước khi suy khớp — không xoay pixel tay.
         let orientation = VisionPose.cgOrientation(fromDegrees: orientationDegrees)
         let upright = ((orientationDegrees % 360) + 360) % 360 % 180 != 0
         let rawW = CVPixelBufferGetWidth(pixelBuffer)
@@ -127,8 +147,24 @@ nonisolated final class PoseDetector: @unchecked Sendable {
 
         queue.async { [weak self] in
             guard let self else { return }
-            let frame = VisionPose.frame(fromPixelBuffer: pixelBuffer,
-                                         orientation: orientation)
+            let timestamp = max(Self.uptimeMs(), self.lastTimestampMs + 1)
+            self.lastTimestampMs = timestamp
+            let frame: PoseFrame?
+            do {
+                if self.useVisionFallback || self.landmarker == nil {
+                    frame = VisionPose.frame(fromPixelBuffer: pixelBuffer, orientation: orientation)
+                } else {
+                    let input = try MediaPipePose.image(pixelBuffer, rotationDegrees: orientationDegrees)
+                    let result = try self.landmarker!.detect(
+                        videoFrame: input,
+                        timestampInMilliseconds: Int(timestamp)
+                    )
+                    frame = MediaPipePose.frame(from: result, timestampMs: timestamp)
+                }
+            } catch {
+                NSLog("PoseDetector: MediaPipe inference thất bại — \(error)")
+                frame = nil
+            }
 
             self.lock.lock()
             self.busy = false
@@ -137,7 +173,7 @@ nonisolated final class PoseDetector: @unchecked Sendable {
             if daDong { return }
 
             guard let frame else {
-                self.onError("Không chạy được nhận diện khung xương (Vision).")
+                self.onError("Không chạy được nhận diện khung xương.")
                 return
             }
             let stats = InferenceStats(inferenceTimeMs: Self.uptimeMs() - sent,
@@ -171,8 +207,22 @@ nonisolated final class PoseDetector: @unchecked Sendable {
 
         queue.async { [weak self] in
             guard let self else { return }
-            let frame = image.cgImage.flatMap {
-                VisionPose.frame(fromCGImage: $0, orientation: orientation)
+            let timestamp = max(Self.uptimeMs(), self.lastTimestampMs + 1)
+            self.lastTimestampMs = timestamp
+            let frame: PoseFrame?
+            do {
+                if self.useVisionFallback || self.landmarker == nil {
+                    frame = image.cgImage.flatMap { VisionPose.frame(fromCGImage: $0, orientation: orientation) }
+                } else {
+                    let result = try self.landmarker!.detect(
+                        videoFrame: MediaPipePose.image(image),
+                        timestampInMilliseconds: Int(timestamp)
+                    )
+                    frame = MediaPipePose.frame(from: result, timestampMs: timestamp)
+                }
+            } catch {
+                NSLog("PoseDetector: MediaPipe image inference thất bại — \(error)")
+                frame = nil
             }
 
             self.lock.lock()
@@ -183,7 +233,7 @@ nonisolated final class PoseDetector: @unchecked Sendable {
 
             self.onFrameImage?(image)
             guard let frame else {
-                self.onError("Không chạy được nhận diện khung xương (Vision).")
+                self.onError("Không chạy được nhận diện khung xương.")
                 return
             }
             let stats = InferenceStats(inferenceTimeMs: Self.uptimeMs() - sent,

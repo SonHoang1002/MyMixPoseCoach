@@ -1,6 +1,5 @@
 #!/bin/zsh
-# Kiểm tra cú pháp Swift của TOÀN BỘ app iOS mà KHÔNG cần mở Xcode.
-# Dùng khi port code từ Android: chạy lệnh này để bắt lỗi trước khi báo xong.
+# Kiểm tra TOÀN BỘ app cùng MediaPipe, ML Kit và ONNX Runtime.
 #
 #   ./myposecoach1/typecheck.sh          # kiểm tra toàn bộ
 #
@@ -9,19 +8,15 @@ set -e
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$ROOT"
 
-SDK=$(xcrun --sdk iphonesimulator --show-sdk-path)
-# Không còn framework ngoài: nhận diện khung xương dùng Apple Vision (trong SDK).
-SOURCES=( myposecoach1/myposecoach1/**/*.swift(N) )
-
-xcrun swiftc -typecheck \
-  -sdk "$SDK" \
-  -target arm64-apple-ios18.0-simulator \
-  -swift-version 5 \
-  -default-isolation MainActor \
-  -enable-upcoming-feature DisableOutwardActorInference \
-  -enable-upcoming-feature InferSendableFromCaptures \
-  -enable-upcoming-feature GlobalActorIsolatedTypesUsability \
-  -enable-upcoming-feature MemberImportVisibility \
-  -enable-upcoming-feature InferIsolatedConformances \
-  -enable-upcoming-feature NonisolatedNonsendingByDefault \
-  "${SOURCES[@]}"
+if ! command -v pod >/dev/null; then
+  echo "CocoaPods is required: sudo gem install cocoapods" >&2
+  exit 2
+fi
+cd myposecoach1
+pod install
+xcodebuild -resolvePackageDependencies -workspace myposecoach1.xcworkspace -scheme myposecoach1
+xcodebuild build \
+  -workspace myposecoach1.xcworkspace \
+  -scheme myposecoach1 \
+  -destination 'generic/platform=iOS Simulator' \
+  CODE_SIGNING_ALLOWED=NO

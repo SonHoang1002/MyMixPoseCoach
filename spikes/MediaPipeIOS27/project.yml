@@ -1,0 +1,26 @@
+name: MediaPipeIOS27
+options:
+  deploymentTarget:
+    iOS: '18.0'
+packages:
+  MediaPipe:
+    url: https://github.com/google-ai-edge/mediapipe.git
+    revision: 821db8a4428baf58bf4c09a0330c937e6e0a3753
+targets:
+  MediaPipeIOS27:
+    type: application
+    platform: iOS
+    sources: [Sources]
+    resources: [Resources]
+    dependencies:
+      - package: MediaPipe
+        product: MediaPipeTasksVision
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.photoguide.mediapipespike
+        SWIFT_VERSION: '5.0'
+        TARGETED_DEVICE_FAMILY: '1,2'
+        GENERATE_INFOPLIST_FILE: YES
+        INFOPLIST_KEY_NSCameraUsageDescription: Test Android pose model compatibility on this iPhone.
+        INFOPLIST_KEY_UIApplicationSceneManifest_Generation: YES
+        INFOPLIST_KEY_UILaunchScreen_Generation: YES

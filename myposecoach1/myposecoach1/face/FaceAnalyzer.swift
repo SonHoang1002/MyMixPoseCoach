@@ -3,6 +3,10 @@ import Foundation
 import ImageIO
 import UIKit
 import Vision
+#if canImport(MLKitFaceDetection) && canImport(MLKitVision)
+import MLKitFaceDetection
+import MLKitVision
+#endif
 
 // Nhận diện khuôn mặt bằng Apple Vision — phản vai trò `FaceAnalyzer` (ML Kit)
 // của Android, nhưng iOS chỉ cần một thứ ML Kit có mà code thật sự dùng:
@@ -47,8 +51,42 @@ nonisolated enum FaceAnalyzer {
     /// Nhận diện mặt trong một ảnh ĐÃ dựng đúng chiều (ảnh mẫu). Nếu UIImage còn
     /// mang `imageOrientation` (EXIF), Vision tự xoay theo — không cần xoay tay.
     static func face(from image: UIImage) -> FaceInfo? {
+#if canImport(MLKitFaceDetection) && canImport(MLKitVision)
+        let options = FaceDetectorOptions()
+        options.performanceMode = .fast
+        options.classificationMode = .all
+        options.landmarkMode = .none
+        options.contourMode = .none
+        options.minFaceSize = 0.15
+        let detector = FaceDetector.faceDetector(options: options)
+        let input = VisionImage(image: image)
+        input.orientation = image.imageOrientation
+        do {
+            let faces = try detector.results(in: input)
+            guard let face = faces.max(by: {
+                $0.frame.width * $0.frame.height < $1.frame.width * $1.frame.height
+            }) else { return nil }
+            let left = face.hasLeftEyeOpenProbability ? Double(face.leftEyeOpenProbability) : nil
+            let right = face.hasRightEyeOpenProbability ? Double(face.rightEyeOpenProbability) : nil
+            let eyes: Double?
+            switch (left, right) {
+            case let (l?, r?): eyes = min(l, r)
+            case let (l?, nil): eyes = l
+            case let (nil, r?): eyes = r
+            default: eyes = nil
+            }
+            return FaceInfo(
+                yawDeg: face.hasHeadEulerAngleY ? Double(face.headEulerAngleY) : nil,
+                eyesOpen: eyes
+            )
+        } catch {
+            NSLog("FaceAnalyzer: ML Kit thất bại — \(error)")
+            return nil
+        }
+#else
         guard let cg = image.cgImage else { return nil }
         return face(fromCGImage: cg, orientation: CGImagePropertyOrientation(image.imageOrientation))
+#endif
     }
 
     static func face(fromCGImage image: CGImage,
@@ -75,7 +113,7 @@ nonisolated enum FaceAnalyzer {
               let rad = obs.yaw?.doubleValue else {
             return nil
         }
-        return FaceInfo(yawDeg: rad * 180.0 / Double.pi)
+        return FaceInfo(yawDeg: rad * 180.0 / Double.pi, eyesOpen: nil)
     }
 }
 

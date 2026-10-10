@@ -1,13 +1,11 @@
 import Foundation
 import ImageIO
+import MediaPipeTasksVision
 import UIKit
 
 // Nhận diện khung xương trên chuỗi khung hình VIDEO (quét lại video đã quay).
 //
-// Trước đây dùng chế độ VIDEO của MediaPipe (có BÁM/tracking qua các khung hình).
-// Vision không có bám liên khung — mỗi khung hình dò độc lập. Về mặt số liệu, đầu
-// ra vẫn là cùng kiểu [PoseFrame]; chỉ khác là có thể "rung" hơn khi người cử động
-// nhanh. Chấp nhận được cho đường "chấm khung hình sau khi quay".
+// Chế độ VIDEO của MediaPipe có tracking qua các khung, giống đường Android.
 //
 // Ba chế độ trước đây của MediaPipe, ánh xạ 1-1 với ba chỗ gọi trong sản phẩm:
 //     ảnh mẫu          → StillPoseAnalyzer
@@ -19,17 +17,30 @@ nonisolated final class VideoPoseAnalyzer: @unchecked Sendable {
 
     private let lock = NSLock()
     private var closed = false
+    private var landmarker: PoseLandmarker?
+    private var useVisionFallback = false
+    private var lastTimestampMs: Int64 = -1
 
     init(modelAsset: String = PoseDetector.MODEL_FULL,
          minPoseDetectionConfidence: Float = 0.5,
          minTrackingConfidence: Float = 0.5) {
-        // Vision không nạp model — giữ tham số cho tương thích API cũ.
+        do {
+            landmarker = try MediaPipePose.makeLandmarker(
+                mode: .video,
+                modelAsset: modelAsset,
+                minDetection: minPoseDetectionConfidence,
+                minTracking: minTrackingConfidence
+            )
+        } catch {
+            useVisionFallback = true
+            NSLog("VideoPoseAnalyzer: MediaPipe không sẵn sàng, dùng Vision fallback — \(error)")
+        }
     }
 
     var isReady: Bool {
         lock.lock()
         defer { lock.unlock() }
-        return !closed
+        return !closed && (landmarker != nil || useVisionFallback)
     }
 
     /// Phân tích một khung hình.
@@ -44,21 +55,34 @@ nonisolated final class VideoPoseAnalyzer: @unchecked Sendable {
         lock.lock()
         let daDong = closed
         lock.unlock()
-        guard !daDong, let cg = image.cgImage else { return nil }
-
-        let orientation = CGImagePropertyOrientation(image.imageOrientation)
-        guard let frame = VisionPose.frame(fromCGImage: cg, orientation: orientation) else {
-            return nil
+        guard !daDong else { return nil }
+        let timestamp = max(timestampMs, lastTimestampMs + 1)
+        lastTimestampMs = timestamp
+        if let landmarker {
+            do {
+                let result = try landmarker.detect(
+                    videoFrame: MediaPipePose.image(image),
+                    timestampInMilliseconds: Int(timestamp)
+                )
+                return MediaPipePose.frame(from: result, timestampMs: timestamp)
+            } catch {
+                NSLog("VideoPoseAnalyzer: MediaPipe inference thất bại — \(error)")
+                return nil
+            }
         }
-        return PoseFrame(points: frame.points,
-                         visibility: frame.visibility,
-                         world: frame.world,
-                         timestampMs: timestampMs)
+        guard let cg = image.cgImage,
+              let frame = VisionPose.frame(
+                fromCGImage: cg,
+                orientation: CGImagePropertyOrientation(image.imageOrientation)
+              ) else { return nil }
+        return PoseFrame(points: frame.points, visibility: frame.visibility,
+                         world: frame.world, timestampMs: timestamp)
     }
 
     func close() {
         lock.lock()
         closed = true
+        landmarker = nil
         lock.unlock()
     }
 }

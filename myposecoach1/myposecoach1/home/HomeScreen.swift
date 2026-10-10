@@ -52,6 +52,8 @@ struct HomeScreen: View {
 
     /// Ảnh vừa chép vào, đang chờ gắn nhãn trong `NhapAnhSheet`.
     @State private var nhapMoi: URL? = nil
+    /// Kết quả tự nhận diện đã chạy trước khi mở bảng; tránh chạy model lần hai.
+    @State private var nhapTruoc: KetQuaNhap? = nil
 
     /// File đang mở trong bảng gắn nhãn.
     ///
@@ -134,11 +136,25 @@ struct HomeScreen: View {
                 // sẽ không có onChange nào nữa và app "đứng im" không hiểu vì sao.
                 pickedItem = nil
                 if let copied {
-                    // CHƯA nạp lại thư viện: ảnh chưa gắn nhãn thì chưa phải ảnh mẫu.
-                    // Xem `NhapAnhSheet`. Cổng kiểm vẫn chạy ngay trong bảng, không
-                    // có đường tắt cho ảnh tự nhập.
-                    sheetFile = copied
-                    nhapMoi = copied
+                    importing = true
+                    let detected = await Task.detached(priority: .userInitiated) {
+                        nhanDienNhap(file: copied)
+                    }.value
+                    importing = false
+                    // Đủ chắc mọi câu thì gắn nhãn và vào thẳng màn chụp. Cổng kiểm
+                    // đã nằm trong `nhanDienNhap`, nên không có đường tắt ảnh lỗi.
+                    if detected.duChac {
+                        let saved = MediaLibrary.ganNhan(
+                            copied, kind: detected.kieu, goc: detected.goc,
+                            kieuTren: detected.canKieuTren ? detected.kieuTren : nil
+                        )
+                        reloadLibrary()
+                        onPickTemplate(saved)
+                    } else {
+                        nhapTruoc = detected
+                        sheetFile = copied
+                        nhapMoi = copied
+                    }
                 } else {
                     importError = "Không đọc được ảnh vừa chọn. Thử ảnh khác."
                 }
@@ -172,6 +188,7 @@ struct HomeScreen: View {
             if let f = sheetFile {
                 NhapAnhSheet(
                     file: f,
+                    truoc: nhapTruoc,
                     onHuy: huyNhapAnh,
                     onChonAnhKhac: {
                         // Đúng thứ tự của Android: xoá file tạm, đóng bảng, MỞ LẠI
@@ -181,6 +198,7 @@ struct HomeScreen: View {
                     },
                     onLuu: { luu, kq in
                         nhapMoi = nil
+                        nhapTruoc = nil
                         reloadLibrary()
                         hienKetQua(file: luu, kq: kq)
                     }
@@ -270,6 +288,7 @@ struct HomeScreen: View {
             try? FileManager.default.removeItem(at: f)
         }
         nhapMoi = nil
+        nhapTruoc = nil
     }
 
     // MARK: - Thẻ import
