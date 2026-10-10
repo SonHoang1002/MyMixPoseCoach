@@ -1,0 +1,59 @@
+name: iOS clean-clone build
+
+on:
+  push:
+    branches:
+      - phuong-an-tich-hop-ios
+  pull_request:
+    branches:
+      - iosv1
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: macos-26
+    timeout-minutes: 45
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Verify bundled models
+        run: ./tools/verify_ios_assets.sh
+
+      - name: Install locked CocoaPods
+        run: sudo gem install cocoapods --version 1.16.2 --no-document
+
+      - name: Restore CocoaPods
+        working-directory: myposecoach1
+        run: pod _1.16.2_ install
+
+      - name: Verify CocoaPods lockfile
+        run: git diff --exit-code -- myposecoach1/Podfile.lock
+
+      - name: Resolve Swift packages
+        run: >-
+          xcodebuild -resolvePackageDependencies
+          -workspace myposecoach1/myposecoach1.xcworkspace
+          -scheme myposecoach1
+
+      - name: Verify Swift Package lockfiles
+        run: >-
+          git diff --exit-code --
+          myposecoach1/myposecoach1.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved
+          myposecoach1/myposecoach1.xcworkspace/xcshareddata/swiftpm/Package.resolved
+
+      - name: Build
+        run: >-
+          xcodebuild build
+          -workspace myposecoach1/myposecoach1.xcworkspace
+          -scheme myposecoach1
+          -destination 'generic/platform=iOS'
+          -derivedDataPath "$RUNNER_TEMP/DerivedData"
+          CODE_SIGNING_ALLOWED=NO
+
+      - name: Verify models in app bundle
+        run: |
+          app="$RUNNER_TEMP/DerivedData/Build/Products/Debug-iphoneos/myposecoach1.app"
+          test -f "$app/pose_landmarker_full.task"
+          test -f "$app/geocalib/geocalib-mang-int8.onnx" || test -f "$app/geocalib-mang-int8.onnx"
