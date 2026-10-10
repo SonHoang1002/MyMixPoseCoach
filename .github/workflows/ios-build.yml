@@ -28,11 +28,8 @@ jobs:
         working-directory: myposecoach1
         run: pod _1.16.2_ install
 
-      - name: Save generated Podfile.lock
-        uses: actions/upload-artifact@v4
-        with:
-          name: Podfile-lock
-          path: myposecoach1/Podfile.lock
+      - name: Verify CocoaPods lockfile
+        run: git diff --exit-code -- myposecoach1/Podfile.lock
 
       - name: Resolve Swift packages
         run: >-
@@ -40,10 +37,25 @@ jobs:
           -workspace myposecoach1/myposecoach1.xcworkspace
           -scheme myposecoach1
 
+      - name: Verify Swift Package lockfiles
+        run: >-
+          git diff --exit-code --
+          myposecoach1/myposecoach1.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved
+          myposecoach1/myposecoach1.xcworkspace/xcshareddata/swiftpm/Package.resolved
+
       - name: Build
         run: >-
           xcodebuild build
           -workspace myposecoach1/myposecoach1.xcworkspace
           -scheme myposecoach1
           -destination 'generic/platform=iOS Simulator'
+          -derivedDataPath "$RUNNER_TEMP/DerivedData"
+          ARCHS=arm64
+          ONLY_ACTIVE_ARCH=YES
           CODE_SIGNING_ALLOWED=NO
+
+      - name: Verify models in app bundle
+        run: |
+          app="$RUNNER_TEMP/DerivedData/Build/Products/Debug-iphonesimulator/myposecoach1.app"
+          test -f "$app/pose_landmarker_full.task"
+          test -f "$app/geocalib/geocalib-mang-int8.onnx" || test -f "$app/geocalib-mang-int8.onnx"

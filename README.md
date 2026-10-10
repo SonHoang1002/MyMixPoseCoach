@@ -9,7 +9,7 @@ MediaPipe, ONNX Runtime và ML Kit được khóa phiên bản trong project/loc
 
 ## Build trên máy mới
 
-Yêu cầu: macOS, Xcode 26.4 trở lên và kết nối mạng ở lần build đầu tiên.
+Yêu cầu: máy Mac Apple Silicon, Xcode 26.4 trở lên và kết nối mạng ở lần build đầu tiên. Binary MediaPipe 1.1.0 hiện chỉ cung cấp simulator `arm64`, không có simulator `x86_64` cho Mac Intel.
 
 ```bash
 git clone https://github.com/BNNam299/MyMixPoseCoach.git
