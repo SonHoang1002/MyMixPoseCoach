@@ -1,3 +1,109 @@
-PODFILE CHECKSUM: 19974a48afd61a31e274c964a63c1a7e60372411
+PODS:
+  - GoogleDataTransport (10.1.1):
+    - nanopb (~> 3.30910.0)
+    - PromisesObjC (~> 2.4)
+  - GoogleMLKit/FaceDetection (8.0.0):
+    - GoogleMLKit/MLKitCore
+    - MLKitFaceDetection (~> 7.0.0)
+  - GoogleMLKit/ImageLabeling (8.0.0):
+    - GoogleMLKit/MLKitCore
+    - MLKitImageLabeling (~> 7.0.0)
+  - GoogleMLKit/MLKitCore (8.0.0):
+    - MLKitCommon (~> 13.0.0)
+  - GoogleToolboxForMac/Defines (4.2.1)
+  - GoogleToolboxForMac/Logger (4.2.1):
+    - GoogleToolboxForMac/Defines (= 4.2.1)
+  - "GoogleToolboxForMac/NSData+zlib (4.2.1)":
+    - GoogleToolboxForMac/Defines (= 4.2.1)
+  - GoogleUtilities/Environment (8.1.4):
+    - GoogleUtilities/Privacy
+  - GoogleUtilities/Logger (8.1.4):
+    - GoogleUtilities/Environment
+    - GoogleUtilities/Privacy
+  - GoogleUtilities/Privacy (8.1.4)
+  - GoogleUtilities/UserDefaults (8.1.4):
+    - GoogleUtilities/Logger
+    - GoogleUtilities/Privacy
+  - GTMSessionFetcher/Core (3.5.0)
+  - MLImage (1.0.0-beta7)
+  - MLKitCommon (13.0.0):
+    - GoogleDataTransport (~> 10.0)
+    - GoogleToolboxForMac/Logger (< 5.0, >= 4.2.1)
+    - "GoogleToolboxForMac/NSData+zlib (< 5.0, >= 4.2.1)"
+    - GoogleUtilities/Logger (~> 8.0)
+    - GoogleUtilities/UserDefaults (~> 8.0)
+    - GTMSessionFetcher/Core (< 4.0, >= 3.3.2)
+  - MLKitFaceDetection (7.0.0):
+    - MLKitCommon (~> 13.0)
+    - MLKitVision (~> 9.0)
+  - MLKitImageLabeling (7.0.0):
+    - MLKitCommon (~> 13.0)
+    - MLKitImageLabelingCommon (~> 9.0)
+    - MLKitVision (~> 9.0)
+    - MLKitVisionKit (~> 10.0)
+  - MLKitImageLabelingCommon (9.0.0):
+    - MLKitCommon (~> 13.0)
+    - MLKitVision (~> 9.0)
+  - MLKitObjectDetectionCommon (9.0.0):
+    - MLKitCommon (~> 13.0)
+    - MLKitVision (~> 9.0)
+  - MLKitVision (9.0.0):
+    - GoogleToolboxForMac/Logger (< 5.0, >= 4.2.1)
+    - "GoogleToolboxForMac/NSData+zlib (< 5.0, >= 4.2.1)"
+    - GTMSessionFetcher/Core (< 4.0, >= 3.3.2)
+    - MLImage (= 1.0.0-beta7)
+    - MLKitCommon (~> 13.0)
+  - MLKitVisionKit (10.0.0):
+    - MLKitCommon (~> 13.0)
+    - MLKitImageLabelingCommon (~> 9.0)
+    - MLKitObjectDetectionCommon (~> 9.0)
+    - MLKitVision (~> 9.0)
+  - nanopb (3.30910.0):
+    - nanopb/decode (= 3.30910.0)
+    - nanopb/encode (= 3.30910.0)
+  - nanopb/decode (3.30910.0)
+  - nanopb/encode (3.30910.0)
+  - PromisesObjC (2.4.1)
+
+DEPENDENCIES:
+  - GoogleMLKit/FaceDetection (= 8.0.0)
+  - GoogleMLKit/ImageLabeling (= 8.0.0)
+
+SPEC REPOS:
+  trunk:
+    - GoogleDataTransport
+    - GoogleMLKit
+    - GoogleToolboxForMac
+    - GoogleUtilities
+    - GTMSessionFetcher
+    - MLImage
+    - MLKitCommon
+    - MLKitFaceDetection
+    - MLKitImageLabeling
+    - MLKitImageLabelingCommon
+    - MLKitObjectDetectionCommon
+    - MLKitVision
+    - MLKitVisionKit
+    - nanopb
+    - PromisesObjC
+
+SPEC CHECKSUMS:
+  GoogleDataTransport: a24e58982ab3ba2f64d79613e027fe7f57e88539
+  GoogleMLKit: ddd51d7dff36ff28defa69afedd9cdce684fd857
+  GoogleToolboxForMac: d1a2cbf009c453f4d6ded37c105e2f67a32206d8
+  GoogleUtilities: db34c1c11c6f2eccb6fab2340cb8ceb1451299dc
+  GTMSessionFetcher: 5aea5ba6bd522a239e236100971f10cb71b96ab6
+  MLImage: 2ab9c968e75f57911c16f4c9d9e8a8e9604a86a1
+  MLKitCommon: 26b779f072a182c1603d4c88a101c350cac837b1
+  MLKitFaceDetection: d50aff1a44aa9a4e95f7e208298a3ce40b68f9f8
+  MLKitImageLabeling: b486a127450efab9ed86e633f9a12fe7d9dbc493
+  MLKitImageLabelingCommon: 30fb7c613cd8dfd281f0456cb1c58758743cccb6
+  MLKitObjectDetectionCommon: 90b0e94db1c66f51196b487befa01f195106fa15
+  MLKitVision: fa8dea9012ac59497c79ddbe9ebf32051047ac4c
+  MLKitVisionKit: e8244baf4d19cf7669c65da7907662c402adcb05
+  nanopb: fad817b59e0457d11a5dfbde799381cd727c1275
+  PromisesObjC: 752c3227f599e3467650e47ea36f433eeb10c273
+
+PODFILE CHECKSUM: ed8f536f9e702ad4d590b45d5e726f750cccfd69
 
 COCOAPODS: 1.16.2
