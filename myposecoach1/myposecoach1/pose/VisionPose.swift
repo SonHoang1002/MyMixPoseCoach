@@ -12,8 +12,8 @@ import Vision
 // và trên iOS 27 hoặc GPU A13 có thể chạm vào selector
 // `AGXA13FamilyFunctionHandle resourceIndex` mà driver AGX không còn trả lời — app
 // sập bằng NSException khi graph bắt đầu chạy.
-// Vision là framework của hệ điều hành, không có pipeline Metal riêng, nên hết
-// hẳn lớp lỗi đó.
+// ⚠️ Vision KHÔNG miễn nhiễm: nó cũng chạy model trên GPU và sập cùng selector đó
+// trên A13. Vì vậy trên A13 mọi request bị ép CPU và bỏ request 3D (`GPUCompat`).
 //
 // ## Hệ toạ độ
 //
@@ -76,8 +76,13 @@ nonisolated enum VisionPose {
 
     private static func run(handler: VNImageRequestHandler) -> PoseFrame? {
         let pose2D = VNDetectHumanBodyPoseRequest()
+        GPUCompat.avoidGPUIfNeeded(pose2D)
         var requests: [VNRequest] = [pose2D]
-        let pose3D: VNDetectHumanBodyPose3DRequest? = include3D ? VNDetectHumanBodyPose3DRequest() : nil
+        // Trên A13 bỏ hẳn 3D: pipeline ABPK của nó tự dựng Metal riêng và chính là
+        // nơi app sập (`AGXA13FamilyFunctionHandle resourceIndex`). Thiếu `world`
+        // thì mọi phép đo 3D tự trả nil qua `PoseFrame.world(_:minVisibility:)`.
+        let pose3D: VNDetectHumanBodyPose3DRequest? =
+            include3D && !GPUCompat.isA13 ? VNDetectHumanBodyPose3DRequest() : nil
         if let pose3D { requests.append(pose3D) }
 
         do {

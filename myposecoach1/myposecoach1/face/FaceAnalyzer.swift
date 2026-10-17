@@ -99,6 +99,7 @@ nonisolated enum FaceAnalyzer {
 
     private static func run(handler: VNImageRequestHandler) -> FaceInfo? {
         let request = VNDetectFaceRectanglesRequest()
+        GPUCompat.avoidGPUIfNeeded(request)
         do {
             try handler.perform([request])
         } catch {

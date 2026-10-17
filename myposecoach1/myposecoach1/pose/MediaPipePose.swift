@@ -1,6 +1,5 @@
 import Foundation
 import MediaPipeTasksVision
-import Metal
 import UIKit
 
 /// Cầu nối DUY NHẤT từ MediaPipe sang kiểu dữ liệu thuần `PoseFrame` của app.
@@ -47,9 +46,7 @@ nonisolated enum MediaPipePose {
         if version.majorVersion >= 27 {
             return "iOS \(version.majorVersion).\(version.minorVersion).\(version.patchVersion)"
         }
-        if let gpu = MTLCreateSystemDefaultDevice(),
-           gpu.supportsFamily(.apple6),
-           !gpu.supportsFamily(.apple7) {
+        if GPUCompat.isA13 {
             return "GPU Apple A13 (Apple family 6)"
         }
         return nil
