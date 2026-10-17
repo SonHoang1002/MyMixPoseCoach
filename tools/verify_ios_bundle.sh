@@ -33,4 +33,24 @@ if (( asset_count != 15 )); then
   exit 4
 fi
 
-echo "PASS: app bundle chứa đủ 2 model và 13 template đúng checksum."
+missing_runtime_dependency=0
+while IFS= read -r -d '' binary; do
+  if ! file "$binary" | grep -q 'Mach-O'; then
+    continue
+  fi
+  while IFS= read -r dependency; do
+    [[ "$dependency" == @rpath/* ]] || continue
+    relative_path="${dependency#@rpath/}"
+    if [[ ! -e "$APP_BUNDLE/$relative_path" \
+       && ! -e "$APP_BUNDLE/Frameworks/$relative_path" ]]; then
+      echo "Lỗi: $(basename "$binary") cần $dependency nhưng app bundle không chứa file đó." >&2
+      missing_runtime_dependency=1
+    fi
+  done < <(otool -L "$binary" | awk 'NR > 1 { print $1 }')
+done < <(find "$APP_BUNDLE" -type f -print0)
+
+if (( missing_runtime_dependency != 0 )); then
+  exit 4
+fi
+
+echo "PASS: app bundle chứa đủ asset và toàn bộ dependency @rpath."

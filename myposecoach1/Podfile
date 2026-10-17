@@ -1,7 +1,10 @@
 platform :ios, '18.0'
 
 target 'myposecoach1' do
-  use_frameworks!
+  # Link toàn bộ dependency ML Kit vào app để không phụ thuộc framework động
+  # FBLPromises ở runtime. Dynamic linkage từng build thành công nhưng không có
+  # phase embed tương ứng, khiến app chết trong dyld trước khi vào Swift.
+  use_frameworks! :linkage => :static
 
   # Cùng engine nhận diện mặt và nhãn ảnh với Android.
   pod 'GoogleMLKit/FaceDetection', '8.0.0'
