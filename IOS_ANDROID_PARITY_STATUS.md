@@ -5,7 +5,7 @@ Android source of truth: local `phuong-an-tich-hop` working tree frozen at commi
 ## Implemented in source
 
 - MediaPipe Pose Landmarker 1.1.0 pinned by revision, CPU, Full model, one pose, thresholds 0.5 and segmentation off.
-- One MediaPipe result conversion for image, tracked video and live camera paths; Apple Vision remains a crash-loop fallback.
+- One MediaPipe result conversion for image, tracked video and live camera paths; Apple Vision is selected before MediaPipe on iOS 27+ and Apple A13 GPUs because the native MediaPipe Metal graph can terminate the process with `AGXA13FamilyFunctionHandle resourceIndex`.
 - Pose model matches Android SHA-256 `4eaa5eb7a98365221087693fcc286334cf0858e2eb6e15b506aa4a7ecdcec4ad`.
 - ML Kit Face Detection and Image Labeling 8.0.0 declared through CocoaPods. Face yaw and eye-open classification follow Android settings.
 - GeoCalib ONNX Runtime 1.24.2 CPU path, matching preprocessing and the ported perspective solver.

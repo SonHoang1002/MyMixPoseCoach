@@ -1,5 +1,6 @@
 import Foundation
 import MediaPipeTasksVision
+import Metal
 import UIKit
 
 /// Cầu nối DUY NHẤT từ MediaPipe sang kiểu dữ liệu thuần `PoseFrame` của app.
@@ -15,8 +16,8 @@ nonisolated enum MediaPipePose {
 
         var errorDescription: String? {
             switch self {
-            case .incompatibleRuntime(let version):
-                return "MediaPipe 1.1.0 không tương thích ổn định với iOS \(version); dùng Apple Vision để tránh lỗi Metal."
+            case .incompatibleRuntime(let reason):
+                return "MediaPipe 1.1.0 không tương thích ổn định với \(reason); dùng Apple Vision để tránh lỗi Metal."
             case .previousNativeCrash:
                 return "MediaPipe đã sập ở lần khởi tạo trước; tạm dùng Apple Vision để app vẫn mở được."
             case .missingModel(let name):
@@ -32,13 +33,30 @@ nonisolated enum MediaPipePose {
     }
 
     /// MediaPipe Tasks 1.1.0 vẫn dựng graph Metal ở tầng native khi chạy CPU.
-    /// Trên iOS 27, graph đó có thể gửi selector `resourceIndex` tới
+    /// Trên iOS 27 và GPU A13, graph đó có thể gửi selector `resourceIndex` tới
     /// `AGXA13FamilyFunctionHandle` và làm chết tiến trình bằng NSException — Swift
     /// không thể bắt để chuyển engine sau khi lỗi đã xảy ra. Vì ảnh mẫu, camera và
-    /// hậu kỳ phải dùng cùng một engine, iOS 27 được chuyển sang Vision ngay từ đầu.
-    /// Các iOS cũ hơn vẫn dùng MediaPipe Full để giữ parity với Android.
+    /// hậu kỳ phải dùng cùng một engine, các runtime bị ảnh hưởng được chuyển sang
+    /// Vision ngay từ đầu. Các máy còn lại vẫn dùng MediaPipe Full để giữ parity với Android.
+    ///
+    /// Dùng GPU family thay vì tên model máy/GPU: theo bảng Metal của Apple, A13 là
+    /// Apple family 6 còn A14 bắt đầu ở family 7. GPU family có tính bao hàm, nên phải
+    /// kiểm tra `apple6 && !apple7` để chỉ khoanh đúng A13.
+    private static let forcedVisionReason: String? = {
+        let version = ProcessInfo.processInfo.operatingSystemVersion
+        if version.majorVersion >= 27 {
+            return "iOS \(version.majorVersion).\(version.minorVersion).\(version.patchVersion)"
+        }
+        if let gpu = MTLCreateSystemDefaultDevice(),
+           gpu.supportsFamily(.apple6),
+           !gpu.supportsFamily(.apple7) {
+            return "GPU Apple A13 (Apple family 6)"
+        }
+        return nil
+    }()
+
     static var requiresVisionFallback: Bool {
-        ProcessInfo.processInfo.operatingSystemVersion.majorVersion >= 27
+        forcedVisionReason != nil
     }
 
     static func makeLandmarker(
@@ -51,11 +69,8 @@ nonisolated enum MediaPipePose {
         creationLock.lock()
         defer { creationLock.unlock() }
 
-        let osVersion = ProcessInfo.processInfo.operatingSystemVersion
-        guard !requiresVisionFallback else {
-            throw EngineError.incompatibleRuntime(
-                "\(osVersion.majorVersion).\(osVersion.minorVersion).\(osVersion.patchVersion)"
-            )
+        if let forcedVisionReason {
+            throw EngineError.incompatibleRuntime(forcedVisionReason)
         }
         guard !wasQuarantinedAfterNativeCrash else {
             throw EngineError.previousNativeCrash
