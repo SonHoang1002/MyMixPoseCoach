@@ -8,9 +8,9 @@ import Vision
 //
 // ## Vì sao đổi
 //
-// MediaPipeTasksVision 1.0.0 dựng pipeline Metal riêng cả khi `delegate = .CPU`,
-// và trên iOS 27 chạm vào selector `AGXA13FamilyFunctionHandle resourceIndex` mà
-// driver AGX không còn trả lời — app sập ngay lúc khởi tạo `PoseLandmarker`.
+// MediaPipeTasksVision 1.1.0 dựng pipeline Metal riêng cả khi `delegate = .CPU`,
+// và trên iOS 27 có thể chạm vào selector `AGXA13FamilyFunctionHandle resourceIndex`
+// mà driver AGX không còn trả lời — app sập bằng NSException khi graph bắt đầu chạy.
 // Vision là framework của hệ điều hành, không có pipeline Metal riêng, nên hết
 // hẳn lớp lỗi đó.
 //

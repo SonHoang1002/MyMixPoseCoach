@@ -9,11 +9,14 @@ nonisolated enum MediaPipePose {
     private static let crashMarker = "pose.mediapipe.initializing"
 
     enum EngineError: LocalizedError {
+        case incompatibleRuntime(String)
         case previousNativeCrash
         case missingModel(String)
 
         var errorDescription: String? {
             switch self {
+            case .incompatibleRuntime(let version):
+                return "MediaPipe 1.1.0 không tương thích ổn định với iOS \(version); dùng Apple Vision để tránh lỗi Metal."
             case .previousNativeCrash:
                 return "MediaPipe đã sập ở lần khởi tạo trước; tạm dùng Apple Vision để app vẫn mở được."
             case .missingModel(let name):
@@ -28,6 +31,16 @@ nonisolated enum MediaPipePose {
         UserDefaults.standard.bool(forKey: crashMarker)
     }
 
+    /// MediaPipe Tasks 1.1.0 vẫn dựng graph Metal ở tầng native khi chạy CPU.
+    /// Trên iOS 27, graph đó có thể gửi selector `resourceIndex` tới
+    /// `AGXA13FamilyFunctionHandle` và làm chết tiến trình bằng NSException — Swift
+    /// không thể bắt để chuyển engine sau khi lỗi đã xảy ra. Vì ảnh mẫu, camera và
+    /// hậu kỳ phải dùng cùng một engine, iOS 27 được chuyển sang Vision ngay từ đầu.
+    /// Các iOS cũ hơn vẫn dùng MediaPipe Full để giữ parity với Android.
+    static var requiresVisionFallback: Bool {
+        ProcessInfo.processInfo.operatingSystemVersion.majorVersion >= 27
+    }
+
     static func makeLandmarker(
         mode: RunningMode,
         modelAsset: String,
@@ -38,6 +51,12 @@ nonisolated enum MediaPipePose {
         creationLock.lock()
         defer { creationLock.unlock() }
 
+        let osVersion = ProcessInfo.processInfo.operatingSystemVersion
+        guard !requiresVisionFallback else {
+            throw EngineError.incompatibleRuntime(
+                "\(osVersion.majorVersion).\(osVersion.minorVersion).\(osVersion.patchVersion)"
+            )
+        }
         guard !wasQuarantinedAfterNativeCrash else {
             throw EngineError.previousNativeCrash
         }
