@@ -45,6 +45,12 @@ Nếu chỉ muốn chuẩn bị dependency rồi mở Xcode:
 Cũng có thể nhấp đúp `setup-ios.command` trong Finder để chạy đúng bước trên.
 
 Luôn mở `myposecoach1/myposecoach1.xcworkspace`, không mở trực tiếp `.xcodeproj`.
+
+Scheme `myposecoach1` được chia sẻ trong repo và đã tắt **GPU Frame Capture** cùng
+**Metal API Validation**. Trên iPhone A13 chạy iOS 27, app sập bằng
+`-[AGXA13FamilyFunctionHandle resourceIndex]` khi chạy từ Xcode, bất kể engine nhận
+diện nào; hai lớp debug Metal này đang là nghi phạm chính. Đừng bật lại khi chưa
+kiểm trên máy A13.
 ML Kit cho iOS được Google phát hành qua CocoaPods, nên `pod install` là bước bắt
 buộc; script đã tự động hóa bước này.
 
